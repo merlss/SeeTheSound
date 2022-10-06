@@ -23,7 +23,7 @@ void setup() {
   f = createFont("Courier", 20);
   font = new ControlFont(f);
 
-
+  test();
   loadMainScreen();
 }
 
