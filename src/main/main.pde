@@ -1,4 +1,5 @@
 import controlP5.*;
+import processing.sound.*;
 
 // ui Elements
 ControlP5 ui;
@@ -9,13 +10,21 @@ color button_hoverColor = color(255, 100, 100, 200);
 color button_pressColor = color(255, 0, 0, 255);
 color text_color = color(0);
 
-Button drawSongButton;
-Button selfPlayingButton;
-Button exitButton;
 Button backButton;
 
 String currentPage;
 
+// mainScreen Variables
+Button drawSongButton;
+Button selfPlayingButton;
+Button exitButton;
+
+
+//drawSong Variables
+SoundFile audioFile;
+Button selectFileButton;
+String fileName;
+boolean showFileName;
 
 void setup() {
   size(displayWidth, displayHeight);
@@ -29,7 +38,9 @@ void setup() {
 
 
 void draw() {
-
+  if (showFileName && fileName != null) {
+    textLabel(fileName, 200, 200, 80, text_color);
+  }
 }
 
 void loadMainScreen() {
@@ -53,13 +64,16 @@ void loadMainScreen() {
 void loadSetupDrawSong() {
   background(255);
   hideUIObjects();
-  if (backButton == null) {
+  if (selectFileButton == null) {
     textLabel("Setup", displayWidth/2, 200, 80, text_color);
     drawBackButton(currentPage);
+    selectFileButton = button("handleFileSelect", "Select Audiofile", displayWidth/2, 450, 600, 100, button_color, button_hoverColor, button_pressColor, 50);
   }
   else {
+    textLabel("Setup", displayWidth/2, 200, 80, text_color);
     backButton.setStringValue(currentPage);
     backButton.show();
+    selectFileButton.show();
   }
   currentPage = "loadSetupDrawSong";
 }
@@ -86,8 +100,12 @@ void hideUIObjects() {
   if (backButton != null) {
     backButton.hide();
   }
+  if (selectFileButton != null) {
+    selectFileButton.hide();
+  }
 
 }
+
 
 Button button(String linkedFunction, String label, float posX, float posY, int w, int h, color col, color hoverCol, color pressCol, int fontSize) {
   Button button;
@@ -115,6 +133,7 @@ void textLabel(String label, float posX, float posY, float fontSize, color textC
   fill(textColor);
   textAlign(CENTER);
   textSize(fontSize);
+  println("drawingNow");
   text(label, posX, posY);
 }
 
@@ -124,7 +143,24 @@ public void handleDrawSong(int value) {
 }
 
 public void handleOwnSong(int value) {
-  println(value);
+
+}
+
+void fileSelected(File file) {
+  if (file != null) {
+    String[] list = split(file.getAbsolutePath(), "\\");
+    fileName = list[list.length-1];
+
+    showFileName = true;
+  }
+}
+
+void testDraw() {
+  textLabel("Setup", displayWidth/2, 200, 80, text_color);
+}
+
+public void handleFileSelect() {
+  selectInput("Select a file to process:", "fileSelected");
 }
 
 
