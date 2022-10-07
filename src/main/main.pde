@@ -1,6 +1,12 @@
 import controlP5.*;
 import processing.sound.*;
 
+
+//general
+float dWidth;
+float dHeight;
+color bgColor = color(255);
+
 // ui Elements
 ControlP5 ui;
 PFont f;
@@ -12,7 +18,7 @@ color text_color = color(0);
 
 Button backButton;
 
-String currentPage;
+String currentPage = "loadMainScreen";
 
 // mainScreen Variables
 Button drawSongButton;
@@ -29,58 +35,65 @@ boolean showFileName;
 void setup() {
   size(displayWidth, displayHeight);
   ui = new ControlP5(this);
-  f = createFont("Courier", 20);
+  f = createFont("Courier", 20, true);
   font = new ControlFont(f);
-
+  dWidth = displayWidth;
+  dHeight = displayHeight;
 
   loadMainScreen();
 }
 
 
 void draw() {
+  //background(bgColor);
+  //method(currentPage);
   if (showFileName && fileName != null) {
-    textLabel(fileName, 200, 200, 80, text_color);
+    textLabel(fileName, calcWidth((dWidth/2)+250), calcHeight(400+calcFontSize(35/2)), calcFontSize(35), text_color);
+    showFileName = false;
   }
 }
 
 void loadMainScreen() {
-  background(255);
+  String lastPage = currentPage;
+  currentPage = "loadMainScreen";
+  background(bgColor);
   hideUIObjects();
   if (drawSongButton == null) {
-    textLabel("See the Sound", displayWidth/2, 200, 100, text_color);
-    drawSongButton = button("handleDrawSong", "Draw Song", displayWidth/2, 400, 600, 100, button_color, button_hoverColor, button_pressColor, 50);
-    selfPlayingButton = button("handleOwnSong", "Make your own Song", displayWidth/2, 550, 600, 100, button_color, button_hoverColor, button_pressColor, 50);
-    exitButton = button("quitGame", "Quit", displayWidth/2, 700, 600, 100, button_color, button_hoverColor, button_pressColor, 50);
+    textLabel("See the Sound", calcWidth(dWidth/2), calcHeight(200),  calcFontSize(100), text_color);
+    drawSongButton = button("handleDrawSong", "Draw Song", calcWidth(dWidth/2), calcHeight(400), calcWidth(600), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50));
+    selfPlayingButton = button("handleOwnSong", "Make your own Song", calcWidth(dWidth/2), calcHeight(550), calcWidth(600), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50));
+    exitButton = button("quitGame", "Quit", calcWidth(dWidth/2), calcHeight(700), calcWidth(600), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50));
   }
   else {
-    textLabel("See the Sound", displayWidth/2, 200, 100, text_color);
+    textLabel("See the Sound", calcWidth(dWidth/2), calcHeight(200), calcFontSize(100), text_color);
     drawSongButton.show();
     selfPlayingButton.show();
     exitButton.show();
   }
-  currentPage = "loadMainScreen";
 }
 
 void loadSetupDrawSong() {
-  background(255);
+  String lastPage = currentPage;
+  currentPage = "loadSetupDrawSong";
+  background(bgColor);
   hideUIObjects();
   if (selectFileButton == null) {
-    textLabel("Setup", displayWidth/2, 200, 80, text_color);
-    drawBackButton(currentPage);
-    selectFileButton = button("handleFileSelect", "Select Audiofile", displayWidth/2, 450, 600, 100, button_color, button_hoverColor, button_pressColor, 50);
+    textLabel("Setup", calcWidth(dWidth/2), calcHeight(200), calcFontSize(80), text_color);
+    drawBackButton(lastPage);
+    selectFileButton = button("handleFileSelect", "Select Audiofile", calcWidth((dWidth/2)-250), calcHeight(400), calcWidth(400), calcHeight(70), button_color, button_hoverColor, button_pressColor, calcFontSize(35));
+
   }
   else {
-    textLabel("Setup", displayWidth/2, 200, 80, text_color);
-    backButton.setStringValue(currentPage);
+    textLabel("Setup", calcWidth(dWidth/2), calcHeight(200), calcFontSize(80), text_color);
+    backButton.setStringValue(lastPage);
     backButton.show();
     selectFileButton.show();
   }
-  currentPage = "loadSetupDrawSong";
 }
 
 void drawBackButton(String lastPage) {
-  backButton = button("changeBackButtonValue", "Back", 80, 80, 120, 60, button_color, button_hoverColor, button_pressColor, 30);
-  backButton.setStringValue(currentPage);
+  backButton = button("changeBackButtonValue", "Back", calcWidth(80), calcHeight(80), calcWidth(120), calcHeight(60), button_color, button_hoverColor, button_pressColor, calcFontSize(30));
+  backButton.setStringValue(lastPage);
 }
 
 void changeBackButtonValue() {
@@ -103,15 +116,17 @@ void hideUIObjects() {
   if (selectFileButton != null) {
     selectFileButton.hide();
   }
-
+  if (currentPage != "loadSetupDrawSong") {
+    showFileName = false;
+  }
 }
 
 
-Button button(String linkedFunction, String label, float posX, float posY, int w, int h, color col, color hoverCol, color pressCol, int fontSize) {
+Button button(String linkedFunction, String label, float posX, float posY, float w, float h, color col, color hoverCol, color pressCol, float fontSize) {
   Button button;
   button = ui.addButton(linkedFunction)
   .setBroadcast(false) //disable button trigger
-  .setSize(w, h)
+  .setSize(int(w), int(h))
   .setPosition(posX - w/2, posY - h/2)
   .setColorBackground(col)
   .setColorForeground(hoverCol)
@@ -120,7 +135,7 @@ Button button(String linkedFunction, String label, float posX, float posY, int w
 
   button.setLabel(label);
 
-  font = new ControlFont(f, fontSize);
+  font = new ControlFont(f, int(fontSize));
 
   button.getCaptionLabel()
   .setFont(font)
@@ -133,7 +148,6 @@ void textLabel(String label, float posX, float posY, float fontSize, color textC
   fill(textColor);
   textAlign(CENTER);
   textSize(fontSize);
-  println("drawingNow");
   text(label, posX, posY);
 }
 
@@ -150,13 +164,10 @@ void fileSelected(File file) {
   if (file != null) {
     String[] list = split(file.getAbsolutePath(), "\\");
     fileName = list[list.length-1];
+    fill(color(255,0,0));
 
     showFileName = true;
   }
-}
-
-void testDraw() {
-  textLabel("Setup", displayWidth/2, 200, 80, text_color);
 }
 
 public void handleFileSelect() {
@@ -166,4 +177,18 @@ public void handleFileSelect() {
 
 public void quitGame() {
   exit();
+}
+
+public float calcHeight(float h) {
+  return map(h, 0, 1080, 0, displayHeight);
+}
+
+public float calcWidth(float w) {
+  return map(w, 0, 1920, 0, displayWidth);
+}
+
+public int calcFontSize(int f) {
+  float x = map(f, 0, 1920, 0, displayWidth);
+  float y = map(f, 0, 1080, 0, displayHeight);
+  return int((x+y)/2);
 }
