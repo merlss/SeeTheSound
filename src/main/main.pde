@@ -9,11 +9,11 @@ color bgColor = color(255);
 
 // ui Elements
 ControlP5 ui;
-PFont f;
+//PFont f;
 ControlFont font;
-color button_color = color(255, 50, 50, 255);
-color button_hoverColor = color(255, 100, 100, 200);
-color button_pressColor = color(255, 0, 0, 255);
+color button_color = color(58, 59, 112, 255);
+color button_hoverColor = color(97, 98, 186, 255);
+color button_pressColor = color(90, 90, 110, 255);
 color text_color = color(0);
 
 Button backButton;
@@ -26,16 +26,19 @@ Button selfPlayingButton;
 Button exitButton;
 
 
-//drawSong Variables
+//Setup Variables
 SoundFile audioFile;
 Button selectFileButton;
 String fileName;
 boolean showFileName;
+boolean showErrorMessage = false;
+String errorMessage;
+Button setupContinueButton;
 
 void setup() {
   size(displayWidth, displayHeight);
   ui = new ControlP5(this);
-  f = createFont("Courier", 20, true);
+  PFont f = createFont("Courier", 20, true);
   font = new ControlFont(f);
   dWidth = displayWidth;
   dHeight = displayHeight;
@@ -45,12 +48,27 @@ void setup() {
 
 
 void draw() {
-  //background(bgColor);
-  //method(currentPage);
+  background(bgColor);
   if (showFileName && fileName != null) {
     textLabel(fileName, calcWidth((dWidth/2)+250), calcHeight(400+calcFontSize(35/2)), calcFontSize(35), text_color);
-    showFileName = false;
   }
+  if (showErrorMessage && errorMessage != null) {
+    textLabel(errorMessage, calcWidth((dWidth/2)), calcHeight(700+calcFontSize(35/2)), calcFontSize(25), color(220,40,40));
+  }
+  if (currentPage == "loadMainScreen") {
+    drawMainScreen();
+  }
+  else if (currentPage == "loadSetupDrawSong") {
+    drawSetupScreen();
+  }
+}
+
+void drawMainScreen() {
+  textLabel("See the Sound", calcWidth(dWidth/2), calcHeight(200), calcFontSize(100), text_color);
+}
+
+void drawSetupScreen() {
+  textLabel("Setup", calcWidth(dWidth/2), calcHeight(200), calcFontSize(80), text_color);
 }
 
 void loadMainScreen() {
@@ -59,13 +77,13 @@ void loadMainScreen() {
   background(bgColor);
   hideUIObjects();
   if (drawSongButton == null) {
-    textLabel("See the Sound", calcWidth(dWidth/2), calcHeight(200),  calcFontSize(100), text_color);
+    drawMainScreen();
     drawSongButton = button("handleDrawSong", "Draw Song", calcWidth(dWidth/2), calcHeight(400), calcWidth(600), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50));
     selfPlayingButton = button("handleOwnSong", "Make your own Song", calcWidth(dWidth/2), calcHeight(550), calcWidth(600), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50));
     exitButton = button("quitGame", "Quit", calcWidth(dWidth/2), calcHeight(700), calcWidth(600), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50));
   }
   else {
-    textLabel("See the Sound", calcWidth(dWidth/2), calcHeight(200), calcFontSize(100), text_color);
+    drawMainScreen();
     drawSongButton.show();
     selfPlayingButton.show();
     exitButton.show();
@@ -78,16 +96,30 @@ void loadSetupDrawSong() {
   background(bgColor);
   hideUIObjects();
   if (selectFileButton == null) {
-    textLabel("Setup", calcWidth(dWidth/2), calcHeight(200), calcFontSize(80), text_color);
+    drawSetupScreen();
     drawBackButton(lastPage);
     selectFileButton = button("handleFileSelect", "Select Audiofile", calcWidth((dWidth/2)-250), calcHeight(400), calcWidth(400), calcHeight(70), button_color, button_hoverColor, button_pressColor, calcFontSize(35));
-
+    setupContinueButton = button("handleSetupContinue", "Continue", calcWidth(dWidth/2), calcHeight(800), calcWidth(600), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50));
   }
   else {
-    textLabel("Setup", calcWidth(dWidth/2), calcHeight(200), calcFontSize(80), text_color);
+    drawSetupScreen();
     backButton.setStringValue(lastPage);
     backButton.show();
     selectFileButton.show();
+    setupContinueButton.show();
+  }
+}
+
+void loadSongDrawPage() {
+  if (audioFile != null) {
+    String lastPage = currentPage;
+    currentPage = "loadSongDrawPage";
+    background(bgColor);
+    hideUIObjects();
+    audioFile.play();
+  }
+  else {
+
   }
 }
 
@@ -118,6 +150,10 @@ void hideUIObjects() {
   }
   if (currentPage != "loadSetupDrawSong") {
     showFileName = false;
+    fileName = null;
+  }
+  if (setupContinueButton != null) {
+    setupContinueButton.hide();
   }
 }
 
@@ -134,7 +170,7 @@ Button button(String linkedFunction, String label, float posX, float posY, float
   .setBroadcast(true); // enable button trigger
 
   button.setLabel(label);
-
+  PFont f = createFont("Courier", fontSize, true);
   font = new ControlFont(f, int(fontSize));
 
   button.getCaptionLabel()
@@ -144,6 +180,7 @@ Button button(String linkedFunction, String label, float posX, float posY, float
 }
 
 void textLabel(String label, float posX, float posY, float fontSize, color textColor) {
+  PFont f = createFont("Courier", fontSize, true);
   textFont(f);
   fill(textColor);
   textAlign(CENTER);
@@ -160,13 +197,41 @@ public void handleOwnSong(int value) {
 
 }
 
+public void handleSetupContinue() {
+  String prefix = "";
+  if (fileName != null) {
+    String[] list = split(fileName, ".");
+    prefix = list[list.length-1];
+  }
+  println("handle "+ fileName+ "  "+ prefix);
+  if (fileName != null && prefix.equals("mp3")) {
+    loadSongDrawPage();
+  }
+  else {
+    errorMessage = "current Setup is not valid";
+    showErrorMessage = true;
+  }
+
+}
+
 void fileSelected(File file) {
   if (file != null) {
-    String[] list = split(file.getAbsolutePath(), "\\");
+    String path = file.getAbsolutePath();
+    audioFile = new SoundFile(this, path);
+    String[] list = split(path, "\\");
     fileName = list[list.length-1];
     fill(color(255,0,0));
 
     showFileName = true;
+    String[] fileNameList = split(fileName, ".");
+    String prefix = fileNameList[fileNameList.length-1];
+    println(prefix);
+    if (fileName != null && prefix.equals("mp3")) {
+      showErrorMessage = false;
+    }
+    else {
+      showErrorMessage = true;
+    }
   }
 }
 
