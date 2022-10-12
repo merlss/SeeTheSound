@@ -57,8 +57,8 @@ void setup() {
   ui = new ControlP5(this);
   PFont f = createFont("Courier", 20, true);
   font = new ControlFont(f);
-  dWidth = displayWidth;
-  dHeight = displayHeight;
+  dWidth = 1920;
+  dHeight = 1080;
 
   sineWidth = width/2+width/4;
   sineXIncrement = (TWO_PI / sinePeriod) * sineWaveResolution;
@@ -115,6 +115,8 @@ void loadMainScreen() {
   hideUIObjects();
   if (drawSongButton == null) {
     drawMainScreen();
+    int x = 1600;
+    println( map(x/2, 0, 1920, 0, x));
     drawSongButton = button("handleDrawSong", "Draw Song", calcWidth(dWidth/2), calcHeight(400), calcWidth(600), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50));
     selfPlayingButton = button("handleOwnSong", "Make your own Song", calcWidth(dWidth/2), calcHeight(550), calcWidth(600), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50));
     exitButton = button("quitGame", "Quit", calcWidth(dWidth/2), calcHeight(700), calcWidth(600), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50));
@@ -308,11 +310,11 @@ public void quitGame() {
 }
 
 public float calcHeight(float h) {
-  return map(h, 0, 1080, 0, displayHeight);
+  return map(h, 0, 1080, 0, dHeight);
 }
 
 public float calcWidth(float w) {
-  return map(w, 0, 1920, 0, displayWidth);
+  return map(w, 0, 1920, 0, dWidth);
 }
 
 public int calcFontSize(int f) {
