@@ -310,11 +310,11 @@ public void quitGame() {
 }
 
 public float calcHeight(float h) {
-  return map(h, 0, 1080, 0, dHeight);
+  return map(h, 0, 1080, 0, displayHeight);
 }
 
 public float calcWidth(float w) {
-  return map(w, 0, 1920, 0, dWidth);
+  return map(w, 0, 1920, 0, displayWidth);
 }
 
 public int calcFontSize(int f) {
