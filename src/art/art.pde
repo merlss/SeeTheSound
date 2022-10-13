@@ -1,21 +1,26 @@
-ArtGenerator gen1;
+//ArtGenerator gen1;
+
+Generator gen1;
 
 void setup() {
 
   size(800, 600);
-  background(255);
-  strokeWeight(2);
+  background(0);
+  stroke(100);
   smooth();
+  frameRate(16);
 
-  gen1 = new ArtGenerator();
-  gen1.initShape(10);
+  //noLoop();
+
+  gen1 = new Generator();
+  gen1.initShape();
 }
 
 void draw() {
 
   //gen1.drawCircle();
 
-  gen1.drawLines();
+  gen1.drawShape();
 
 
 
