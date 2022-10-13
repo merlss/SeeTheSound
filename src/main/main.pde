@@ -10,12 +10,21 @@ color lightBgColor = color(116,116,142,255);
 
 // ui Elements
 ControlP5 ui;
+
+Sound sound;
 //PFont f;
 ControlFont font;
+
+//button
 color button_color = color(77,76,108,255);
 color button_hoverColor = color(87,86,118,255);
 color button_pressColor = color(36,36,62,255);
 color text_color = color(255);
+
+//slider
+color slider_color = color(77,76,108,255);
+color slider_activeColor = color(87,86,118,255);
+color slider_backgroundColor = color(36,36,52,255);
 
 Button backButton;
 
@@ -37,9 +46,10 @@ String errorMessage;
 Button setupContinueButton;
 
 //pause window
-boolean showPauseWindow;
+boolean paused;
 Button pauseContinueButton;
 Button pauseExitButton;
+Slider pauseVolumeSlider;
 
 //background
 boolean drawBackground;
@@ -51,6 +61,7 @@ float sinePeriod = 500.0;
 float sineXIncrement;
 float[] sineYValues;
 color sineColor = color(92,118,199,255);
+float volume = 1;
 
 void setup() {
   size(displayWidth, displayHeight);
@@ -59,6 +70,8 @@ void setup() {
   font = new ControlFont(f);
   dWidth = 1920;
   dHeight = 1080;
+
+  sound = new Sound(this);
 
   sineWidth = width/2+width/4;
   sineXIncrement = (TWO_PI / sinePeriod) * sineWaveResolution;
@@ -72,6 +85,7 @@ void setup() {
 
 void draw() {
   background(bgColor);
+  sound.volume(volume);
   if (drawBackground) {
     calcWave();
     renderWave();
@@ -82,7 +96,7 @@ void draw() {
   if (showErrorMessage && errorMessage != null) {
     textLabel(errorMessage, calcWidth((dWidth/2)), calcHeight(700+calcFontSize(35/2)), calcFontSize(25), color(220,40,40));
   }
-  if (showPauseWindow) {
+  if (paused) {
     drawPauseScreen();
   }
   if (currentPage == "loadMainScreen") {
@@ -164,10 +178,11 @@ void loadSongDrawPage() {
 }
 
 void loadPauseWindow() {
-  showPauseWindow = true;
+  paused = true;
   if (pauseContinueButton == null) {
     pauseContinueButton = button("handlePauseContinue", "Continue", calcWidth(dWidth/2), calcHeight(320), calcWidth(380), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50));
     pauseExitButton = button("handlePauseExit", "Exit", calcWidth(dWidth/2), calcHeight(750), calcWidth(380), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50));
+    pauseVolumeSlider = slider("volume", " Volume", calcWidth(dWidth/2), calcHeight(450), calcWidth(200), calcHeight(40), calcFontSize(50));
   }
   else {
     pauseContinueButton.show();
@@ -246,6 +261,26 @@ void textLabel(String label, float posX, float posY, float fontSize, color textC
   text(label, posX, posY);
 }
 
+Slider slider(String sliderValue, String label, float posX, float posY, float w, float h, float fontSize) {
+  Slider slider = ui.addSlider(sliderValue)
+  .setPosition(posX - w, posY)
+  .setRange(0,1)
+  .setSize(int(w), int(h))
+  .setColorForeground(slider_color)
+  .setColorActive(slider_activeColor)
+  .setColorBackground(slider_backgroundColor);
+
+  slider.setLabel(label);
+  PFont f = createFont("Courier", fontSize, true);
+  font = new ControlFont(f, int(fontSize));
+
+  slider.getCaptionLabel()
+  .setFont(font)
+  .toUpperCase(false);
+
+  return slider;
+}
+
 
 public void handleDrawSong(int value) {
   loadSetupDrawSong();
@@ -273,12 +308,12 @@ public void handleSetupContinue() {
 
 public void handlePauseContinue() {
    hideUIObjects();
-   showPauseWindow = false;
+   paused = false;
  }
 
 public void handlePauseExit() {
   hideUIObjects();
-  showPauseWindow = false;
+  paused = false;
   loadMainScreen();
 }
 void fileSelected(File file) {
@@ -348,8 +383,15 @@ void renderWave() {
 }
 
 void keyPressed() {
-  if (key == ESC) {
-    key = 0;
-    loadPauseWindow();
+  if (currentPage.equals("loadSongDrawPage")) {
+    if (key == ESC && !paused) {
+      loadPauseWindow();
+    }
+    else if (key == ESC && paused) {
+      paused = false;
+      hideUIObjects();
+    }
   }
+  key = 0;
+
 }
