@@ -16,9 +16,10 @@ Sound sound;
 ControlFont font;
 
 //button
-color button_color = color(77,76,108,255);
-color button_hoverColor = color(87,86,118,255);
-color button_pressColor = color(36,36,62,255);
+color button_color = color(77,76,108,1);
+color button_color_transparent = color(46,46,72,1);
+color button_hoverColor = color(87,87, 87,200);
+color button_pressColor = color(36,36,36,255);
 color text_color = color(255);
 
 //slider
@@ -52,7 +53,10 @@ Button pauseExitButton;
 Slider pauseVolumeSlider;
 
 //background
+PImage bgPicture;
 boolean drawBackground;
+float darkness = 0.6;
+int sineThickness = 15;
 int sineWaveResolution = 8;
 int sineWidth;
 float sineIncrement = 0.0;
@@ -78,6 +82,36 @@ void setup() {
   sineYValues = new float[sineWidth/sineWaveResolution];
 
   drawBackground = true;
+  int rand = int(random(1,4));
+  if (rand == 1) {
+    bgPicture = loadImage("painting1.jpg");
+    image(bgPicture, 0, 0, displayWidth, displayHeight);
+    loadPixels();
+    for (int i = 0; i < pixels.length; i++ ) {
+    color pixel = pixels[i];
+      pixels[i] = color(int(red(pixel)*darkness), int(green(pixel)*darkness), int(blue(pixel)*darkness));
+    }
+    updatePixels();
+  updatePixels();
+  } else if (rand == 2) {
+    bgPicture = loadImage("painting1.jpg");
+    image(bgPicture, 0, 0, displayWidth, displayHeight);
+    loadPixels();
+    for (int i = 0; i < pixels.length; i++ ) {
+    color pixel = pixels[i];
+      pixels[i] = color(int(red(pixel)*darkness), int(green(pixel)*darkness), int(blue(pixel)*darkness));
+    }
+    updatePixels();
+  } else if (rand == 3) {
+    bgPicture = loadImage("painting1.jpg");
+    image(bgPicture, 0, 0, displayWidth, displayHeight);
+    loadPixels();
+    for (int i = 0; i < pixels.length; i++ ) {
+    color pixel = pixels[i];
+      pixels[i] = color(int(red(pixel)*darkness), int(green(pixel)*darkness), int(blue(pixel)*darkness));
+    }
+    updatePixels();
+  }
 
   loadMainScreen();
 }
@@ -85,16 +119,17 @@ void setup() {
 
 void draw() {
   background(bgColor);
+  if (bgPicture != null) {
+    image(bgPicture, 0, 0, displayWidth, displayHeight);
+    updatePixels();
+  }
   sound.volume(volume);
   if (drawBackground) {
     calcWave();
     renderWave();
   }
   if (showFileName && fileName != null) {
-    textLabel(fileName, calcWidth((dWidth/2)+250), calcHeight(400+calcFontSize(35/2)), calcFontSize(35), text_color);
-  }
-  if (showErrorMessage && errorMessage != null) {
-    textLabel(errorMessage, calcWidth((dWidth/2)), calcHeight(700+calcFontSize(35/2)), calcFontSize(25), color(220,40,40));
+    textLabel(fileName, calcWidth((dWidth/2)), calcHeight(550), calcFontSize(100), text_color);
   }
   if (paused) {
     drawPauseScreen();
@@ -108,11 +143,15 @@ void draw() {
 }
 
 void drawMainScreen() {
-  textLabel("See the Sound", calcWidth(dWidth/2), calcHeight(200), calcFontSize(100), text_color);
+
+  textLabel("See the Sound", calcWidth(dWidth/2), calcHeight(200), calcFontSize(145), text_color);
 }
 
 void drawSetupScreen() {
-  textLabel("Setup", calcWidth(dWidth/2), calcHeight(200), calcFontSize(80), text_color);
+  textLabel("Setup", calcWidth(dWidth/2), calcHeight(150), calcFontSize(100), text_color);
+  if (showErrorMessage && errorMessage != null) {
+    textLabel(errorMessage, calcWidth((dWidth/2)), calcHeight(850+calcFontSize(35/2)), calcFontSize(25), color(220,40,40));
+  }
 }
 
 void drawPauseScreen() {
@@ -130,10 +169,9 @@ void loadMainScreen() {
   if (drawSongButton == null) {
     drawMainScreen();
     int x = 1600;
-    println( map(x/2, 0, 1920, 0, x));
-    drawSongButton = button("handleDrawSong", "Draw Song", calcWidth(dWidth/2), calcHeight(400), calcWidth(600), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50));
-    selfPlayingButton = button("handleOwnSong", "Make your own Song", calcWidth(dWidth/2), calcHeight(550), calcWidth(600), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50));
-    exitButton = button("quitGame", "Quit", calcWidth(dWidth/2), calcHeight(700), calcWidth(600), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50));
+    drawSongButton = button("handleDrawSong", "Draw Song", calcWidth(dWidth/2), calcHeight(800), calcWidth(400), calcHeight(50), button_color_transparent, button_hoverColor, button_pressColor, calcFontSize(35));
+    selfPlayingButton = button("handleOwnSong", "Make your own Song", calcWidth(dWidth/2), calcHeight(880), calcWidth(400), calcHeight(50), button_color_transparent, button_hoverColor, button_pressColor, calcFontSize(35));
+    exitButton = button("quitGame", "Quit", calcWidth(dWidth/2), calcHeight(960), calcWidth(400), calcHeight(50), button_color_transparent, button_hoverColor, button_pressColor, calcFontSize(35));
   }
   else {
     drawMainScreen();
@@ -145,6 +183,7 @@ void loadMainScreen() {
 
 void loadSetupDrawSong() {
   drawBackground = true;
+  showErrorMessage = false;
   String lastPage = currentPage;
   currentPage = "loadSetupDrawSong";
   background(bgColor);
@@ -152,8 +191,8 @@ void loadSetupDrawSong() {
   if (selectFileButton == null) {
     drawSetupScreen();
     drawBackButton(lastPage);
-    selectFileButton = button("handleFileSelect", "Select Audiofile", calcWidth((dWidth/2)-250), calcHeight(400), calcWidth(400), calcHeight(70), button_color, button_hoverColor, button_pressColor, calcFontSize(35));
-    setupContinueButton = button("handleSetupContinue", "Continue", calcWidth(dWidth/2), calcHeight(800), calcWidth(600), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50));
+    selectFileButton = button("handleFileSelect", "Select Audiofile", calcWidth((dWidth/2)), calcHeight(780), calcWidth(400), calcHeight(50), button_color_transparent, button_hoverColor, button_pressColor, calcFontSize(35));
+    setupContinueButton = button("handleSetupContinue", "Continue", calcWidth(dWidth/2), calcHeight(920), calcWidth(400), calcHeight(50), button_color_transparent, button_hoverColor, button_pressColor, calcFontSize(35));
   }
   else {
     drawSetupScreen();
@@ -170,15 +209,15 @@ void loadSongDrawPage() {
     currentPage = "loadSongDrawPage";
     background(bgColor);
     hideUIObjects();
-    audioFile.play();
   }
   else {
     showErrorMessage = true;
   }
+  startDraw();
 }
 
 void loadPauseWindow() {
-  paused = true;
+  pauseDraw();
   if (pauseContinueButton == null) {
     pauseContinueButton = button("handlePauseContinue", "Continue", calcWidth(dWidth/2), calcHeight(320), calcWidth(380), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50));
     pauseExitButton = button("handlePauseExit", "Exit", calcWidth(dWidth/2), calcHeight(750), calcWidth(380), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50));
@@ -187,11 +226,12 @@ void loadPauseWindow() {
   else {
     pauseContinueButton.show();
     pauseExitButton.show();
+    pauseVolumeSlider.show();
   }
 }
 
 void drawBackButton(String lastPage) {
-  backButton = button("changeBackButtonValue", "Back", calcWidth(80), calcHeight(80), calcWidth(120), calcHeight(60), button_color, button_hoverColor, button_pressColor, calcFontSize(30));
+  backButton = button("changeBackButtonValue", "Back", calcWidth(80), calcHeight(80), calcWidth(120), calcHeight(60), button_color_transparent, button_hoverColor, button_pressColor, calcFontSize(30));
   backButton.setStringValue(lastPage);
 }
 
@@ -227,6 +267,9 @@ void hideUIObjects() {
   }
   if (pauseExitButton != null) {
     pauseExitButton.hide();
+  }
+  if (pauseVolumeSlider != null) {
+    pauseVolumeSlider.hide();
   }
 }
 
@@ -308,14 +351,15 @@ public void handleSetupContinue() {
 
 public void handlePauseContinue() {
    hideUIObjects();
-   paused = false;
+   startDraw();
  }
 
 public void handlePauseExit() {
   hideUIObjects();
-  paused = false;
+  stopDraw();
   loadMainScreen();
 }
+
 void fileSelected(File file) {
   if (file != null) {
     String path = file.getAbsolutePath();
@@ -378,12 +422,34 @@ void calcWave() {
 void renderWave() {
   stroke(sineColor);
   color col = sineColor;
-  strokeWeight(10);
+  strokeWeight(sineThickness);
   for (int x = 1; x < sineYValues.length; x++) {
     float g = map((x-1)*sineWaveResolution, 0, sineWidth, 0, 255);
-    col = color(red(sineColor), g, blue(sineColor));
+    //col = color(red(sineColor), g, blue(sineColor));
+    col = color(g,g,g);
     stroke(col);
     line((x-1)*sineWaveResolution, height/2+sineYValues[(x-1)], x*sineWaveResolution, height/2+sineYValues[x]);
+  }
+}
+
+void pauseDraw() {
+  paused = true;
+  if (audioFile != null) {
+    audioFile.pause();
+  }
+}
+void stopDraw() {
+  paused = false;
+  if (audioFile != null) {
+    audioFile.stop();
+    audioFile = null;
+  }
+}
+
+void startDraw() {
+  paused = false;
+  if (audioFile != null) {
+    audioFile.play();
   }
 }
 
@@ -393,10 +459,8 @@ void keyPressed() {
       loadPauseWindow();
     }
     else if (key == ESC && paused) {
-      paused = false;
-      hideUIObjects();
+      handlePauseContinue();
     }
   }
   key = 0;
-
 }
