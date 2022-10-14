@@ -320,14 +320,14 @@ void fileSelected(File file) {
   if (file != null) {
     String path = file.getAbsolutePath();
     audioFile = new SoundFile(this, path);
-    String[] list;
     if (path.indexOf("/") >= 0) {
-      list = split(path, "/");
+      String[] list = split(path, "/");
+      fileName = list[list.length-1];
     }
     else if (path.indexOf("\\") >= 0) {
-      list = split(path, "\\");
+      String[] list = split(path, "\\");
+      fileName = list[list.length-1];
     }
-    fileName = list[list.length-1];
     showFileName = true;
     String[] fileNameList = split(fileName, ".");
     String prefix = fileNameList[fileNameList.length-1];
