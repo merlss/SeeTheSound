@@ -1,10 +1,9 @@
 class Generator {
 
-  float circleRad;
+  int circleRad;
   float gamma;
 
   int strokeCount;
-  int lineLength;
 
   float xoff = 0.0;
 
@@ -16,33 +15,32 @@ class Generator {
 
   float theta = 0;
 
-
   float[] currPoints_x = new float[10];
   float[] currPoints_y = new float[10];
   float[] endPoints_x = new float[10];
   float[] endPoints_y = new float[10];
 
-  void initShape() {
+  boolean isDrawed = false;
+
+  void initShape(float midX, float midY, int rad) {
 
     pushMatrix();
 
-    startX = 400;
-    startY = 300;
+    startX = midX;
+    startY = midY;
+    circleRad = rad;    // something between 20 and 200
 
     translate(startX, startY);
 
-    strokeCount = (int)random(6, 9);
-    lineLength = 10;
-    circleRad = 100;
-
+    strokeCount = (int)random(3, 8);
 
     for (int i = 0; i < strokeCount; i++) {
 
       currPoints_x[i] = 0;
       currPoints_y[i] = 0;
 
-      endPoints_x[i] = random(circleRad-60, circleRad+60) * cos(theta);
-      endPoints_y[i] = random(circleRad-60, circleRad+60) * sin(theta);
+      endPoints_x[i] = random(circleRad, circleRad*2) * cos(theta);
+      endPoints_y[i] = random(circleRad, circleRad*2) * sin(theta);
 
       theta += strokeCount+1;
     }
@@ -52,9 +50,12 @@ class Generator {
 
   void drawShape() {
 
-    if (lineLength > 0) {
+    if (circleRad > 0) {
 
-      println(lineLength);
+      strokeWeight(circleRad/2);
+      //strokeWeight(5);
+
+      //println(circleRad);
 
       pushMatrix();
 
@@ -62,25 +63,23 @@ class Generator {
 
       for (int i = 0; i < strokeCount; i++) {
 
-        strokeWeight((int)random(7, 13));
+        //strokeWeight((int)random(7, 13));
 
-        println("currX: " + currPoints_x[i] + "   currY: " + currPoints_y[i]);
-        println("endX: " + endPoints_x[i] + "   endY: " + endPoints_y[i]);
+        /*
+        float x = endPoints_x[i] / abs(endPoints_x[i]);
+        float y = endPoints_y[i] / abs(endPoints_y[i]);
 
-        float x = endPoints_x[i] / 5;
-        float y = endPoints_y[i] / 5;
+        float nextX = noise((currPoints_x[i] + x) * 2);
+        float nextY = noise((currPoints_y[i] + y) * 2);*/
 
-        //constrain(x, 0, currPoints_x[i] + 20);
-        //constrain(y, 0, currPoints_y[i] + 20);
+        float x = endPoints_x[i] / 10;
+        float y = endPoints_y[i] / 10;
 
-        x += random(-20, 20);
-        y += random(-20, 20);
+        x += random(-10, 10);
+        y += random(-10, 10);
 
         float nextX = currPoints_x[i] + x;
         float nextY = currPoints_y[i] + y;
-
-        println("nextX: " + nextX);
-        println("nextY: " + nextY);
 
         line(currPoints_x[i], currPoints_y[i], nextX, nextY);
 
@@ -93,24 +92,14 @@ class Generator {
 
       }
       popMatrix();
-      lineLength--;
-
-      println(lineLength);
+      circleRad--;
+    }
+    else {
+      isDrawed = true;
     }
   }
 
-
-/*
-  void drawLines(startX, startY) {
-
-    float stepX = 3;
-    float stepY = 4;
-
-    //float endX = startX + stepX;
-    //float endY = startY + stepY;
-
-    //line(x1, y1, x2, y2);
-
+  boolean isFinalDrawed() {
+    return isDrawed;
   }
-  */
 }
