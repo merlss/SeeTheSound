@@ -12,6 +12,7 @@ class Generator {
 
   float startX;
   float startY;
+  color col;
 
   float theta = 0;
 
@@ -22,25 +23,34 @@ class Generator {
 
   boolean isDrawed = false;
 
-  void initShape(float midX, float midY, int rad) {
+  Generator(float _startX, float _startY, int _rad, color _col) {
+
+    startX = _startX;
+    startY = _startY;
+    circleRad = _rad;    // something between 20 and 200
+    col = _col;
+  }
+
+  void initShape() {
 
     pushMatrix();
 
-    startX = midX;
-    startY = midY;
-    circleRad = rad;    // something between 20 and 200
-
     translate(startX, startY);
 
-    strokeCount = (int)random(3, 8);
+    println("radius:  " + circleRad);
+    // 55 23
+
+    stroke(col);
+    float r = map(circleRad, 5, 80, 3, 8);
+    strokeCount = (int)r;
 
     for (int i = 0; i < strokeCount; i++) {
 
       currPoints_x[i] = 0;
       currPoints_y[i] = 0;
 
-      endPoints_x[i] = random(circleRad, circleRad*2) * cos(theta);
-      endPoints_y[i] = random(circleRad, circleRad*2) * sin(theta);
+      endPoints_x[i] = random(circleRad*2, circleRad*4) * cos(theta);
+      endPoints_y[i] = random(circleRad*2, circleRad*4) * sin(theta);
 
       theta += strokeCount+1;
     }
@@ -52,25 +62,13 @@ class Generator {
 
     if (circleRad > 0) {
 
-      strokeWeight(circleRad/2);
-      //strokeWeight(5);
-
-      //println(circleRad);
+      strokeWeight(circleRad + 10);
 
       pushMatrix();
 
       translate(startX, startY);
 
       for (int i = 0; i < strokeCount; i++) {
-
-        //strokeWeight((int)random(7, 13));
-
-        /*
-        float x = endPoints_x[i] / abs(endPoints_x[i]);
-        float y = endPoints_y[i] / abs(endPoints_y[i]);
-
-        float nextX = noise((currPoints_x[i] + x) * 2);
-        float nextY = noise((currPoints_y[i] + y) * 2);*/
 
         float x = endPoints_x[i] / 10;
         float y = endPoints_y[i] / 10;
@@ -81,14 +79,11 @@ class Generator {
         float nextX = currPoints_x[i] + x;
         float nextY = currPoints_y[i] + y;
 
+        stroke(col);
         line(currPoints_x[i], currPoints_y[i], nextX, nextY);
 
         currPoints_x[i] = nextX;
         currPoints_y[i] = nextY;
-
-
-        //ellipse(currPoints_x[i], currPoints_y[i], 5, 5);
-        //ellipse(endPoints_x[i], endPoints_y[i], 5, 5);
 
       }
       popMatrix();
