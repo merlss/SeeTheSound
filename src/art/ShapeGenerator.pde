@@ -32,11 +32,14 @@ class ShapeGenerator extends Generator {
 
     if (circleRad > 0) {
 
-      strokeWeight(circleRad + 10);
+      strokeWeight(circleRad + 5);
+      strokeJoin(ROUND);
+      strokeCap(ROUND);
 
       pushMatrix();
 
-      translate(startX, startY, 0);
+      translate(startX, startY, -20);
+      //translate(startX, startY);
 
       for (int i = 0; i < strokeCount; i++) {
 
@@ -51,6 +54,7 @@ class ShapeGenerator extends Generator {
 
         stroke(col);
         line(currPoints_x[i], currPoints_y[i], 0, nextX, nextY, 0);
+        //line(currPoints_x[i], currPoints_y[i], nextX, nextY);
 
         currPoints_x[i] = nextX;
         currPoints_y[i] = nextY;

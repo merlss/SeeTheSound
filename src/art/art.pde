@@ -3,7 +3,6 @@ import processing.sound.*;
 ArrayList<ShapeGenerator> shapes = new ArrayList<ShapeGenerator>();
 ArrayList<CircleGenerator> circles = new ArrayList<CircleGenerator>();
 
-
 // analyze
 SoundFile sample;
 BeatDetector beatDetector;
@@ -23,6 +22,7 @@ void setup() {
   background(255);
   smooth();
   frameRate(16);
+  hint(DISABLE_OPTIMIZED_STROKE);
 
   sample = new SoundFile(this, "Power.mp3");
   sample.play();
@@ -40,6 +40,8 @@ void setup() {
 
   waveform = new Waveform(this, samples);
   waveform.input(sample);
+  
+  smooth();
 
 }
 
