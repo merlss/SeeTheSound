@@ -14,6 +14,7 @@ ControlP5 ui;
 Sound sound;
 //PFont f;
 ControlFont font;
+color font_color = color(255);
 
 //button
 color button_color = color(77,76,108,1);
@@ -67,6 +68,37 @@ float[] sineYValues;
 color sineColor = color(92,118,199,255);
 float volume = 1;
 
+//Piano Buttons
+SinOsc oscillator1;
+SinOsc oscillator2;
+String osc1 = "0";
+String osc2 = "0";
+color piano_button_color = color(255);
+color piano_button_hoverColor = color(200);
+color piano_button_activeColor = color(150);
+color pianoHalf_button_color = color(0);
+color pianoHalf_button_hoverColor = color(50);
+color pianoHalf_button_activeColor = color(100);
+Button c1B;
+Button d1B;
+Button e1B;
+Button f1B;
+Button g1B;
+Button a1B;
+Button b1B;
+Button c2B;
+Button d2B;
+Button e2B;
+
+Button c1hB;
+Button d1hB;
+Button f1hB;
+Button g1hB;
+Button a1hB;
+Button c2hB;
+Button d2hB;
+
+
 void setup() {
   size(displayWidth, displayHeight);
   ui = new ControlP5(this);
@@ -81,6 +113,9 @@ void setup() {
   sineXIncrement = (TWO_PI / sinePeriod) * sineWaveResolution;
   sineYValues = new float[sineWidth/sineWaveResolution];
 
+  oscillator1 = new SinOsc(this);
+  oscillator2 = new SinOsc(this);
+
   drawBackground = true;
   int rand = int(random(1,4));
   if (rand == 1) {
@@ -92,7 +127,6 @@ void setup() {
       pixels[i] = color(int(red(pixel)*darkness), int(green(pixel)*darkness), int(blue(pixel)*darkness));
     }
     updatePixels();
-  updatePixels();
   } else if (rand == 2) {
     bgPicture = loadImage("painting1.jpg");
     image(bgPicture, 0, 0, displayWidth, displayHeight);
@@ -119,7 +153,7 @@ void setup() {
 
 void draw() {
   background(bgColor);
-  if (bgPicture != null) {
+  if (bgPicture != null && drawBackground == true) {
     image(bgPicture, 0, 0, displayWidth, displayHeight);
     updatePixels();
   }
@@ -169,9 +203,9 @@ void loadMainScreen() {
   if (drawSongButton == null) {
     drawMainScreen();
     int x = 1600;
-    drawSongButton = button("handleDrawSong", "Draw Song", calcWidth(dWidth/2), calcHeight(800), calcWidth(400), calcHeight(50), button_color_transparent, button_hoverColor, button_pressColor, calcFontSize(35));
-    selfPlayingButton = button("handleOwnSong", "Make your own Song", calcWidth(dWidth/2), calcHeight(880), calcWidth(400), calcHeight(50), button_color_transparent, button_hoverColor, button_pressColor, calcFontSize(35));
-    exitButton = button("quitGame", "Quit", calcWidth(dWidth/2), calcHeight(960), calcWidth(400), calcHeight(50), button_color_transparent, button_hoverColor, button_pressColor, calcFontSize(35));
+    drawSongButton = button("handleDrawSong", "Draw Song", calcWidth(dWidth/2), calcHeight(800), calcWidth(400), calcHeight(50), button_color_transparent, button_hoverColor, button_pressColor, calcFontSize(35), font_color);
+    selfPlayingButton = button("handleOwnSong", "Make your own Song", calcWidth(dWidth/2), calcHeight(880), calcWidth(400), calcHeight(50), button_color_transparent, button_hoverColor, button_pressColor, calcFontSize(35), font_color);
+    exitButton = button("quitGame", "Quit", calcWidth(dWidth/2), calcHeight(960), calcWidth(400), calcHeight(50), button_color_transparent, button_hoverColor, button_pressColor, calcFontSize(35), font_color);
   }
   else {
     drawMainScreen();
@@ -191,8 +225,8 @@ void loadSetupDrawSong() {
   if (selectFileButton == null) {
     drawSetupScreen();
     drawBackButton(lastPage);
-    selectFileButton = button("handleFileSelect", "Select Audiofile", calcWidth((dWidth/2)), calcHeight(780), calcWidth(400), calcHeight(50), button_color_transparent, button_hoverColor, button_pressColor, calcFontSize(35));
-    setupContinueButton = button("handleSetupContinue", "Continue", calcWidth(dWidth/2), calcHeight(920), calcWidth(400), calcHeight(50), button_color_transparent, button_hoverColor, button_pressColor, calcFontSize(35));
+    selectFileButton = button("handleFileSelect", "Select Audiofile", calcWidth((dWidth/2)), calcHeight(780), calcWidth(400), calcHeight(50), button_color_transparent, button_hoverColor, button_pressColor, calcFontSize(35), font_color);
+    setupContinueButton = button("handleSetupContinue", "Continue", calcWidth(dWidth/2), calcHeight(920), calcWidth(400), calcHeight(50), button_color_transparent, button_hoverColor, button_pressColor, calcFontSize(35), font_color);
   }
   else {
     drawSetupScreen();
@@ -216,11 +250,190 @@ void loadSongDrawPage() {
   startDraw();
 }
 
+void loadSelfPlayingDraw() {
+  String lastPage = currentPage;
+  currentPage = "loadSelfPlayingDraw";
+  background(bgColor);
+  drawBackground = false;
+  hideUIObjects();
+  float xStep = displayWidth/18;
+  float xPos = xStep*4;
+  float space = 12;
+  c1B = button("C", "C", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+  xPos += xStep + space;
+  d1B = button("D", "D", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+  xPos += xStep + space;
+  e1B = button("E", "E", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+  xPos += xStep + space;
+  f1B = button("F", "F", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+  xPos += xStep + space;
+  g1B = button("G", "G", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+  xPos += xStep + space;
+  a1B = button("A", "A", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+  xPos += xStep + space;
+  b1B = button("B", "B", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+  xPos += xStep + space;
+  c2B = button("C2", "C", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+  xPos += xStep + space;
+  d2B = button("D2", "D", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+  xPos += xStep + space;
+  e2B = button("E2", "E", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+
+  float xPosHalf = xStep*4+xStep/2+space/2;
+  c1hB = button("C#", "C#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+  xPosHalf += xStep + space;
+  d1hB = button("D#", "D#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+  xPosHalf += (xStep + space)*2;
+  f1hB = button("F#", "F#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+  xPosHalf += xStep + space;
+  g1hB = button("G#", "G#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+  xPosHalf += xStep + space;
+  a1hB = button("A#", "A#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+  xPosHalf += (xStep + space)*2;
+  c2hB = button("C2#", "C#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+  xPosHalf += xStep + space;
+  d2hB = button("D2#", "D#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+}
+
+void controlEvent(CallbackEvent event) {
+  if (event.getAction() == ControlP5.ACTION_PRESSED || event.getAction() == ControlP5.ACTION_RELEASED) {
+    float value = 0;
+    String pressedKey = "";
+    switch(event.getController().getAddress()) {
+    case "/C":
+      println("Button C Pressed");
+      value = 261.63;
+      pressedKey = "c";
+      break;
+    case "/D":
+      println("Button D Pressed");
+      value = 293.66;
+      pressedKey = "d";
+      break;
+    case "/E":
+      println("Button E Pressed");
+      value = 329.63;
+      pressedKey = "e";
+      break;
+    case "/F":
+      println("Button F Pressed");
+      value = 349.23;
+      pressedKey = "f";
+      break;
+    case "/G":
+      println("Button G Pressed");
+      value = 392.00;
+      pressedKey = "g";
+      break;
+    case "/A":
+      println("Button A Pressed");
+      value = 440.00;
+      pressedKey = "a";
+      break;
+    case "/B":
+      println("Button B Pressed");
+      value = 493.88;
+      pressedKey = "b";
+      break;
+    case "/C2":
+      println("Button C2 Pressed");
+      value = 523.25;
+      pressedKey = "c2";
+      break;
+    case "/D2":
+      println("Button D2 Pressed");
+      value = 587.33;
+      pressedKey = "d2";
+      break;
+    case "/E2":
+      println("Button E2 Pressed");
+      value = 659.25;
+      pressedKey = "e2";
+      break;
+    case "/C#":
+      println("Button A Pressed");
+      value = 277.18;
+      pressedKey = "c#";
+      break;
+    case "/D#":
+      println("Button B Pressed");
+      value = 311.13;
+      pressedKey = "d#";
+      break;
+    case "/F#":
+      println("Button C2 Pressed");
+      value = 369.99;
+      pressedKey = "f#";
+      break;
+    case "/G#":
+      println("Button D2 Pressed");
+      value = 415.30;
+      pressedKey = "g#";
+      break;
+    case "/A#":
+      println("Button E2 Pressed");
+      value = 466.16;
+      pressedKey = "a#";
+      break;
+    case "/C2#":
+      println("Button D2 Pressed");
+      value = 554.37;
+      pressedKey = "c2#";
+      break;
+    case "/D2#":
+      println("Button E2 Pressed");
+      value = 622.25;
+      pressedKey = "d2#";
+      break;
+    }
+    if (event.getAction() == ControlP5.ACTION_PRESSED && pressedKey.equals("") == false) {
+      println("in");
+      playNote(value, pressedKey);
+    }
+    else if (event.getAction() == ControlP5.ACTION_RELEASED && pressedKey.equals("") == false) {
+      println("out");
+      stopNote(pressedKey);
+    }
+  }
+}
+
+void playNote(float pitch, String pressedKey) {
+  if (osc1.equals("0") == false && osc2.equals("0") == false) {
+    return;
+  }
+  else if (osc1.equals("0") == false && osc2.equals("0") == true) {
+    osc2 = pressedKey;
+    oscillator2.freq(pitch);
+    oscillator2.play();
+  }
+  else if (osc1.equals("0") == true && osc2.equals("0") == false) {
+    osc1 = pressedKey;
+    oscillator1.freq(pitch);
+    oscillator1.play();
+  }
+  else {
+    osc1 = pressedKey;
+    oscillator1.freq(pitch);
+    oscillator1.play();
+  }
+}
+
+void stopNote(String pressedKey) {
+  if (pressedKey.equals(osc1) == true) {
+    oscillator1.stop();
+    osc1 = "0";
+  }
+  else if (pressedKey.equals(osc2) == true) {
+    oscillator2.stop();
+    osc2 = "0";
+  }
+}
+
 void loadPauseWindow() {
   pauseDraw();
   if (pauseContinueButton == null) {
-    pauseContinueButton = button("handlePauseContinue", "Continue", calcWidth(dWidth/2), calcHeight(320), calcWidth(380), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50));
-    pauseExitButton = button("handlePauseExit", "Exit", calcWidth(dWidth/2), calcHeight(750), calcWidth(380), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50));
+    pauseContinueButton = button("handlePauseContinue", "Continue", calcWidth(dWidth/2), calcHeight(320), calcWidth(380), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50), font_color);
+    pauseExitButton = button("handlePauseExit", "Exit", calcWidth(dWidth/2), calcHeight(750), calcWidth(380), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50), font_color);
     pauseVolumeSlider = slider("volume", " Volume", calcWidth(dWidth/2), calcHeight(450), calcWidth(200), calcHeight(40), calcFontSize(50));
   }
   else {
@@ -231,7 +444,7 @@ void loadPauseWindow() {
 }
 
 void drawBackButton(String lastPage) {
-  backButton = button("changeBackButtonValue", "Back", calcWidth(80), calcHeight(80), calcWidth(120), calcHeight(60), button_color_transparent, button_hoverColor, button_pressColor, calcFontSize(30));
+  backButton = button("changeBackButtonValue", "Back", calcWidth(80), calcHeight(80), calcWidth(120), calcHeight(60), button_color_transparent, button_hoverColor, button_pressColor, calcFontSize(30), font_color);
   backButton.setStringValue(lastPage);
 }
 
@@ -274,7 +487,7 @@ void hideUIObjects() {
 }
 
 
-Button button(String linkedFunction, String label, float posX, float posY, float w, float h, color col, color hoverCol, color pressCol, float fontSize) {
+Button button(String linkedFunction, String label, float posX, float posY, float w, float h, color col, color hoverCol, color pressCol, float fontSize, color fontColor) {
   Button button;
   button = ui.addButton(linkedFunction)
   .setBroadcast(false) //disable button trigger
@@ -283,6 +496,7 @@ Button button(String linkedFunction, String label, float posX, float posY, float
   .setColorBackground(col)
   .setColorForeground(hoverCol)
   .setColorActive(pressCol)
+  .setColorCaptionLabel(fontColor)
   .setBroadcast(true); // enable button trigger
 
   button.setLabel(label);
@@ -330,7 +544,7 @@ public void handleDrawSong(int value) {
 }
 
 public void handleOwnSong(int value) {
-
+  loadSelfPlayingDraw();
 }
 
 public void handleSetupContinue() {
@@ -453,7 +667,7 @@ void startDraw() {
   }
 }
 
-void keyPressed() {
+void keyPressed(KeyEvent e) {
   if (currentPage.equals("loadSongDrawPage")) {
     if (key == ESC && !paused) {
       loadPauseWindow();
@@ -462,5 +676,56 @@ void keyPressed() {
       handlePauseContinue();
     }
   }
+  // Jeden Buchstaben nur einmal spielen lassen
+  // if (osc1 == "c" || osc2 == "c") {return};
+  float value = 0;
+  String pressedKey = "";
+  switch(key) {
+    case 'y': value = 261.63; if (osc1 == "c" || osc2 == "c") {return;} c1B.setColorBackground(piano_button_activeColor); pressedKey = "c"; break;
+    case 's': value = 277.18; if (osc1 == "c#" || osc2 == "c#") {return;} c1hB.setColorBackground(pianoHalf_button_activeColor); pressedKey = "c#"; break;
+    case 'x': value = 293.66; if (osc1 == "d" || osc2 == "d") {return;} d1B.setColorBackground(piano_button_activeColor); pressedKey = "d"; break;
+    case 'd': value = 311.13; if (osc1 == "d#" || osc2 == "d#") {return;} d1hB.setColorBackground(pianoHalf_button_activeColor); pressedKey = "d#"; break;
+    case 'c': value = 329.63; if (osc1 == "e" || osc2 == "e") {return;} e1B.setColorBackground(piano_button_activeColor); pressedKey = "e";break;
+    case 'v': value = 349.23; if (osc1 == "f" || osc2 == "f") {return;} f1B.setColorBackground(piano_button_activeColor); pressedKey = "f";break;
+    case 'g': value = 369.99; if (osc1 == "f#" || osc2 == "f#") {return;} f1hB.setColorBackground(pianoHalf_button_activeColor); pressedKey = "f#";break;
+    case 'b': value = 392.00; if (osc1 == "g" || osc2 == "g") {return;} g1B.setColorBackground(piano_button_activeColor); pressedKey = "g";break;
+    case 'h': value = 415.30; if (osc1 == "g#" || osc2 == "g#") {return;} g1hB.setColorBackground(pianoHalf_button_activeColor); pressedKey = "g#";break;
+    case 'n': value = 440.00; if (osc1 == "a" || osc2 == "a") {return;} a1B.setColorBackground(piano_button_activeColor); pressedKey = "a";break;
+    case 'j': value = 466.16; if (osc1 == "a#" || osc2 == "a#") {return;} a1hB.setColorBackground(pianoHalf_button_activeColor); pressedKey = "a#";break;
+    case 'm': value = 493.88; if (osc1 == "b" || osc2 == "b") {return;} b1B.setColorBackground(piano_button_activeColor); pressedKey = "b";break;
+    case ',': value = 523.25; if (osc1 == "c2" || osc2 == "c2") {return;} c2B.setColorBackground(piano_button_activeColor); pressedKey = "c2";break;
+    case 'l': value = 554.37; if (osc1 == "c2#" || osc2 == "c2#") {return;} c2hB.setColorBackground(pianoHalf_button_activeColor); pressedKey = "c2#";break;
+    case '.': value = 587.33; if (osc1 == "d2" || osc2 == "d2") {return;} d2B.setColorBackground(piano_button_activeColor); pressedKey = "d2";break;
+    case 'ö': value = 622.25; if (osc1 == "d2#" || osc2 == "d2#") {return;} d2hB.setColorBackground(pianoHalf_button_activeColor); pressedKey = "d2#";break;
+    case '-': value = 659.25; if (osc1 == "e2" || osc2 == "e2") {return;} e2B.setColorBackground(piano_button_activeColor); pressedKey = "e2"; break;
+
+  }
+  if (value != 0) {
+    println("in");
+    playNote(value, pressedKey);
+  }
   key = 0;
+}
+
+void keyReleased() {
+  switch(key) {
+    case 'y': println("in"); stopNote("c"); c1B.setColorBackground(piano_button_color);  break;
+    case 's':println("in"); stopNote("c#"); c1hB.setColorBackground(pianoHalf_button_color); break;
+    case 'x':println("in"); stopNote("d"); d1B.setColorBackground(piano_button_color); break;
+    case 'd':println("in"); stopNote("d#"); d1hB.setColorBackground(pianoHalf_button_color); break;
+    case 'c':println("in"); stopNote("e"); e1B.setColorBackground(piano_button_color); break;
+    case 'v':println("in"); stopNote("f"); f1B.setColorBackground(piano_button_color); break;
+    case 'g':println("in"); stopNote("f#"); f1hB.setColorBackground(pianoHalf_button_color); break;
+    case 'b':println("in"); stopNote("g"); g1B.setColorBackground(piano_button_color); break;
+    case 'h':println("in"); stopNote("g#"); g1hB.setColorBackground(pianoHalf_button_color); break;
+    case 'n':println("in"); stopNote("a"); a1B.setColorBackground(piano_button_color); break;
+    case 'j':println("in"); stopNote("a#"); a1hB.setColorBackground(pianoHalf_button_color); break;
+    case 'm':println("in"); stopNote("b"); b1B.setColorBackground(piano_button_color); break;
+    case ',':println("in"); stopNote("c2"); c2B.setColorBackground(piano_button_color); break;
+    case 'l':println("in"); stopNote("c2#"); c2hB.setColorBackground(pianoHalf_button_color); break;
+    case '.':println("in"); stopNote("d2"); d2B.setColorBackground(piano_button_color); break;
+    case 'ö':println("in"); stopNote("d2#"); d2hB.setColorBackground(pianoHalf_button_color); break;
+    case '-':println("in"); stopNote("e2"); e2B.setColorBackground(piano_button_color); break;
+
+  }
 }
