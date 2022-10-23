@@ -16,7 +16,7 @@ class CircleGenerator extends Generator {
     fill(col);
     noStroke();
     ellipse(0, 0, circleRad, circleRad);
-    filter(BLUR, blur);
+    //filter(BLUR, blur);
 
     popMatrix();
 
