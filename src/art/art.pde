@@ -40,7 +40,7 @@ void setup() {
 
   waveform = new Waveform(this, samples);
   waveform.input(sample);
-  
+
   smooth();
 
 }
@@ -105,8 +105,11 @@ color generateFFTColor(int intensity) {
   fft.analyze();
   for (int i = 0; i < bands; i++) {
     sum[i] += (fft.spectrum[i] - sum[i]) * multiply;
+    println(i + " :  " + sum[i]);
   }
 
+
+/*
   r = 255 - sum[1] + sum[5];
   g = 255 - sum[2] + sum[6];
   b = 255 - sum[3] + sum[7];
@@ -119,7 +122,9 @@ color generateFFTColor(int intensity) {
   constrain(g, 0, 255);
   constrain(b, 0, 255);
 
-  color col = color(r, g, b);
+  color col = color(r, g, b);*/
+
+  color col = color(20, 20, 20);
 
   return col;
 }

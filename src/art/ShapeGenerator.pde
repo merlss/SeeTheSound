@@ -32,9 +32,7 @@ class ShapeGenerator extends Generator {
 
     if (circleRad > 0) {
 
-      strokeWeight(circleRad + 5);
-      strokeJoin(ROUND);
-      strokeCap(ROUND);
+      //strokeWeight(circleRad + 5);
 
       pushMatrix();
 
@@ -53,7 +51,7 @@ class ShapeGenerator extends Generator {
         float nextY = currPoints_y[i] + y;
 
         stroke(col);
-        line(currPoints_x[i], currPoints_y[i], 0, nextX, nextY, 0);
+        drawLine(currPoints_x[i], currPoints_y[i], 0, nextX, nextY, 0, circleRad+5);
         //line(currPoints_x[i], currPoints_y[i], nextX, nextY);
 
         currPoints_x[i] = nextX;
@@ -66,5 +64,16 @@ class ShapeGenerator extends Generator {
     else {
       isDrawed = true;
     }
+  }
+
+  void drawLine(float x1, float y1, float z1, float x2, float y2, float z2, float weight) {
+
+    strokeWeight(weight);
+
+    float w = weight/4;
+
+    line(x1, y1, z1, x2, y2, z2);
+    ellipse(x1, y1, w, w);
+    ellipse(x2, y2, w, w);
   }
 }
