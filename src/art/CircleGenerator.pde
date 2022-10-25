@@ -2,8 +2,10 @@ class CircleGenerator extends Generator {
 
   int blur = 5;
 
-  CircleGenerator(float _startX, float _startY, int _rad, color _col) {
+  CircleGenerator(float _startX, float _startY, int _rad, color _col, int _depth) {
     super(_startX, _startY, _rad, _col);
+
+    depth = _depth;
 
   }
 
@@ -11,7 +13,7 @@ class CircleGenerator extends Generator {
 
     pushMatrix();
 
-    translate(startX, startY, depth);
+    translate(startX, startY, -20);
 
     fill(col);
     noStroke();

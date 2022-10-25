@@ -21,8 +21,6 @@ void setup() {
   size(displayWidth, displayHeight, P3D);
   background(255);
   smooth();
-  frameRate(16);
-  hint(DISABLE_OPTIMIZED_STROKE);
 
   sample = new SoundFile(this, "Power.mp3");
   sample.play();
@@ -41,16 +39,20 @@ void setup() {
   waveform = new Waveform(this, samples);
   waveform.input(sample);
 
-  smooth();
-
 }
 
 void draw() {
 
-  drawShape();
+  if (frameCount % 4 == 0) {
 
-  //drawBackground();
+    drawBackground();
+    drawShape();
 
+    for (int i = 0; i < shapes.size(); i++) {
+      shapes.get(i).drawShape();
+
+    }
+  }
 }
 
 void drawBackground() {
@@ -61,9 +63,10 @@ void drawBackground() {
     waveform.analyze();
     float waveValueX = random(width);
     float waveValueY = map(waveform.data[0], -1, 1, 0, height);
-    color col = generateFFTColor(0);
-    CircleGenerator gen = new CircleGenerator(waveValueX, waveValueY, amp, col);
-    gen.setDepth(10);
+    //color col = generateFFTColor(0);
+    color col = color(200);
+    CircleGenerator gen = new CircleGenerator(waveValueX, waveValueY, amp, col, -20);
+    //gen.setDepth(10);
     circles.add(gen);
     gen.drawShape();
   }
@@ -84,7 +87,7 @@ void drawShape() {
       gen.drawShape();
     }
   }
-
+/*
   for (int i = 0; i < shapes.size(); i++) {
     ShapeGenerator thisShape = shapes.get(i);
     if (!thisShape.isFinalDrawed()) {
@@ -93,7 +96,7 @@ void drawShape() {
     else {
       shapes.remove(i);
     }
-  }
+  }*/
 }
 
 color generateFFTColor(int intensity) {
@@ -107,7 +110,6 @@ color generateFFTColor(int intensity) {
     sum[i] += (fft.spectrum[i] - sum[i]) * multiply;
     println(i + " :  " + sum[i]);
   }
-
 
 /*
   r = 255 - sum[1] + sum[5];
