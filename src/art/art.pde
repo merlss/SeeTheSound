@@ -49,8 +49,7 @@ void draw() {
     drawShape();
 
     for (int i = 0; i < shapes.size(); i++) {
-      shapes.get(i).drawShape();
-
+      shapes.get(i).redrawShape();
     }
   }
 }
@@ -77,29 +76,30 @@ void drawShape() {
 
     int beatEnergy = getBeatEnergy();
 
-    if (beatEnergy > 15) {
+    if (beatEnergy > 20) {
       float waveValueX = random(30, displayWidth-30);
       float waveValueY = random(30, displayHeight-30);
-      color col = generateFFTColor(20);
+      color col = generateFFTColor(10);
       ShapeGenerator gen = new ShapeGenerator(waveValueX, waveValueY, beatEnergy, col);
-      shapes.add(gen);
       gen.initShape();
       gen.drawShape();
+      shapes.add(gen);
     }
   }
-/*
-  for (int i = 0; i < shapes.size(); i++) {
-    ShapeGenerator thisShape = shapes.get(i);
-    if (!thisShape.isFinalDrawed()) {
-      thisShape.drawShape();
-    }
-    else {
-      shapes.remove(i);
-    }
-  }*/
+
+  /*
+    for (int i = 0; i < shapes.size(); i++) {
+      ShapeGenerator thisShape = shapes.get(i);
+      if (!thisShape.isFinalDrawed()) {
+        thisShape.drawShape();
+      }
+      else {
+        shapes.remove(i);
+      }
+    }*/
 }
 
-color generateFFTColor(int intensity) {
+color generateFFTColor(int brightness) {
 
   float[] sum = new float[bands];
   float multiply = 200;
@@ -111,22 +111,41 @@ color generateFFTColor(int intensity) {
     println(i + " :  " + sum[i]);
   }
 
-/*
-  r = 255 - sum[1] + sum[5];
-  g = 255 - sum[2] + sum[6];
-  b = 255 - sum[3] + sum[7];
+  // red
+  if (sum[4] < sum[7]+sum[8]) {
+    r = sum[1];
+    g = sum[3];
+    b = sum[4];
+  }
+  // blue
+  else if (sum[2] < sum[3]) {
+    r = sum[4];
+    g = sum[5];
+    b = sum[3];
+  }
+  else {
+    r = sum[5];
+    g = sum[2];
+    b = sum[4];
+  }
 
-  r -= intensity;
-  g -= intensity;
-  b -= intensity;
+
+
+  //r = 255 - sum[1] + sum[5];
+  //g = 255 - sum[2] + sum[6];
+  //b = 255 - sum[3] + sum[7];
+
+  //r += brightness;
+  //g += brightness;
+  //b += brightness;
 
   constrain(r, 0, 255);
   constrain(g, 0, 255);
   constrain(b, 0, 255);
 
-  color col = color(r, g, b);*/
+  color col = color(r, g, b);
 
-  color col = color(20, 20, 20);
+  //color col = color(20, 20, 20);
 
   return col;
 }

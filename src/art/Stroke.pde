@@ -1,29 +1,29 @@
 class Stroke {
 
-  ArrayList<float> mPoints_x = new ArrayList<float>;
-  ArrayList<float> mPoints_y = new ArrayList<float>;
-  ArrayList<int> mWeight = new ArrayList<int>;
+  FloatList mPoints_x = new FloatList();
+  FloatList mPoints_y = new FloatList();
+  ArrayList<Integer> mWeight = new ArrayList<Integer>();
 
 
   void addPoint(float x, float y) {
 
-    mPoints_x.add(x);
-    mPoints_y.add(y);
+    mPoints_x.append(x);
+    mPoints_y.append(y);
   }
 
   void addPoint(float x, float y, int w) {
 
-    mPoints_x.add(x);
-    mPoints_y.add(y);
+    mPoints_x.append(x);
+    mPoints_y.append(y);
     mWeight.add(w);
   }
 
-  ArrayList<float> getStrokeX() {
+  FloatList getStrokeX() {
 
     return mPoints_x;
   }
 
-  ArrayList<float> getStrokeY() {
+  FloatList getStrokeY() {
 
     return mPoints_y;
   }

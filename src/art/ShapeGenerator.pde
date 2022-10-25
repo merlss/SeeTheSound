@@ -4,7 +4,7 @@ class ShapeGenerator extends Generator {
   float[] allPoints_x = new float[100];
   float[] allPoints_y = new float[100];
 
-  ArrayList<Stroke> strokes = new ArrayList<Stroke>;
+  ArrayList<Stroke> strokes = new ArrayList<Stroke>();
 
   ShapeGenerator(float _startX, float _startY, int _rad, color _col) {
     super(_startX, _startY, _rad, _col);
@@ -22,9 +22,12 @@ class ShapeGenerator extends Generator {
     float r = map(circleRad, 5, 80, 3, 8);
     strokeCount = (int)r;
 
+
     for (int i = 0; i < strokeCount; i++) {
 
-      strokes.get(i).addPoint(0, 0);
+      Stroke stroke = new Stroke();
+      stroke.addPoint(0, 0, circleRad+5);
+      strokes.add(stroke);
 
       currPoints_x[i] = 0;
       currPoints_y[i] = 0;
@@ -47,17 +50,28 @@ class ShapeGenerator extends Generator {
 
       Stroke stroke = strokes.get(s);
 
-      ArrayList<float> x = stroke.getStrokeX();
-      ArrayList<float> y = stroke.getStrokeY();
+      FloatList strokePointList_x = stroke.getStrokeX();
+      FloatList strokePointList_y = stroke.getStrokeY();
 
-      for (int i = 0; i < x.size()-1; i++) {
-        drawLine(x.get(i), y.get(i), 0, x.get(i+1), y.get(i+1), 0, stroke.getWeight(s))
+      for (int i = 0; i < strokePointList_x.size()-1; i++) {
+        float x1 = strokePointList_x.get(i);
+        float x2 = strokePointList_x.get(i+1);
+        float y1 = strokePointList_y.get(i);
+        float y2 = strokePointList_y.get(i+1);
+        stroke(col);
+        drawLine(x1, y1, 0, x2, y2, 0, stroke.getWeight(i));
       }
     }
     popMatrix();
+
+    if (!isFinalDrawed()) {
+      drawShape();
+    }
   }
 
   void drawShape() {
+
+    if (circleRad > 0) {
 
       pushMatrix();
       translate(startX, startY, 0);
@@ -67,14 +81,14 @@ class ShapeGenerator extends Generator {
         float x = endPoints_x[i] / 10;
         float y = endPoints_y[i] / 10;
 
-        //x += random(-10, 10);
-        //y += random(-10, 10);
+        x += random(-10, 10);
+        y += random(-10, 10);
 
         float nextX = currPoints_x[i] + x;
         float nextY = currPoints_y[i] + y;
 
         stroke(col);
-        int w = rad + 5;
+        int w = circleRad + 5;
         drawLine(currPoints_x[i], currPoints_y[i], 0, nextX, nextY, 0, w);
 
         currPoints_x[i] = nextX;
@@ -82,10 +96,12 @@ class ShapeGenerator extends Generator {
 
         strokes.get(i).addPoint(nextX, nextY, w);
       }
+
       popMatrix();
-    }
-    if (circleRad > 0) {
       circleRad -= 1;
+    }
+    else {
+      isDrawed = true;
     }
   }
 
