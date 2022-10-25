@@ -22,7 +22,7 @@ void setup() {
   background(255);
   smooth();
 
-  sample = new SoundFile(this, "Power.mp3");
+  sample = new SoundFile(this, "ChillLofi.mp3");
   sample.play();
 
   beatDetector = new BeatDetector(this);
@@ -62,8 +62,8 @@ void drawBackground() {
     waveform.analyze();
     float waveValueX = random(width);
     float waveValueY = map(waveform.data[0], -1, 1, 0, height);
-    //color col = generateFFTColor(0);
-    color col = color(200);
+    color col = generateFFTColor(100, 0);
+    //color col = color(80);
     CircleGenerator gen = new CircleGenerator(waveValueX, waveValueY, amp, col, -20);
     //gen.setDepth(10);
     circles.add(gen);
@@ -76,11 +76,12 @@ void drawShape() {
 
     int beatEnergy = getBeatEnergy();
 
-    if (beatEnergy > 20) {
+    if (beatEnergy > 30) {
       float waveValueX = random(30, displayWidth-30);
       float waveValueY = random(30, displayHeight-30);
-      color col = generateFFTColor(10);
-      ShapeGenerator gen = new ShapeGenerator(waveValueX, waveValueY, beatEnergy, col);
+      color col = generateFFTColor(-10, 50);
+      int radius = beatEnergy - 20;
+      ShapeGenerator gen = new ShapeGenerator(waveValueX, waveValueY, radius, col);
       gen.initShape();
       gen.drawShape();
       shapes.add(gen);
@@ -99,7 +100,7 @@ void drawShape() {
     }*/
 }
 
-color generateFFTColor(int brightness) {
+color generateFFTColor(int brightness, int intensity) {
 
   float[] sum = new float[bands];
   float multiply = 200;
@@ -113,39 +114,28 @@ color generateFFTColor(int brightness) {
 
   // red
   if (sum[4] < sum[7]+sum[8]) {
-    r = sum[1];
-    g = sum[3];
-    b = sum[4];
+    r = 255 - sum[1] - sum[2] - intensity;
+    g = sum[5] + sum[6] + brightness;
+    b = sum[3] + sum[4] + brightness;
   }
   // blue
   else if (sum[2] < sum[3]) {
-    r = sum[4];
-    g = sum[5];
-    b = sum[3];
+    r = sum[2] + sum[4] + brightness;
+    g = sum[5] + sum[6] + brightness;
+    b = 255 - sum[1] - sum[3] - intensity;
   }
+  // green
   else {
-    r = sum[5];
-    g = sum[2];
-    b = sum[4];
+    r = sum[5] + sum[6] + brightness;
+    g = 255 - sum[1] - sum[2] - intensity;
+    b = sum[2] + sum[3] + brightness;
   }
 
-
-
-  //r = 255 - sum[1] + sum[5];
-  //g = 255 - sum[2] + sum[6];
-  //b = 255 - sum[3] + sum[7];
-
-  //r += brightness;
-  //g += brightness;
-  //b += brightness;
-
-  constrain(r, 0, 255);
-  constrain(g, 0, 255);
-  constrain(b, 0, 255);
+  constrain(r, 10, 200);
+  constrain(g, 10, 200);
+  constrain(b, 10, 200);
 
   color col = color(r, g, b);
-
-  //color col = color(20, 20, 20);
 
   return col;
 }
@@ -166,7 +156,6 @@ int getBeatEnergy() {
 int getAmplitude() {
 
   int ampScale = (int)(amplitude.analyze() * (height/4) * 2);
-  println(ampScale);
 
   return ampScale;
 }
