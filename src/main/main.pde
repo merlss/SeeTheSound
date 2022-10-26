@@ -161,7 +161,7 @@ void setup() {
   beatDetector = new BeatDetector(this);
   fft = new FFT(this, 32);
   amplitude = new Amplitude(this);
-  waveform = new Waveform(this, 100);
+  waveform = new Waveform(this, width);
 
   loadMainScreen();
 }
@@ -185,6 +185,7 @@ void draw() {
     drawPauseScreen();
   }
   if (isDrawing) {
+    art.drawWave();
     for (int i = 0; i < art.shapes.size(); i++) {
       art.shapes.get(i).redrawShape();
     }

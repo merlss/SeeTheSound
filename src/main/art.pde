@@ -16,7 +16,7 @@ class Art {
   int bands = 32;
   int scale = 5;
   float barWidth;
-  int samples = 100;
+  int samples = width;
 
   void setupArt(SoundFile file, BeatDetector beat, Amplitude amp, Waveform wave, FFT ffT ) {
     beatDetector = beat;
@@ -55,7 +55,7 @@ class Art {
     if (beatDetector.isBeat()) {
 
       int beatEnergy = getBeatEnergy();
-      println(beatEnergy);
+      //println(beatEnergy);
 
       if (beatEnergy > 30) {
         float waveValueX = random(30, displayWidth-30);
@@ -90,7 +90,7 @@ class Art {
     fft.analyze();
     for (int i = 0; i < bands; i++) {
       sum[i] += (fft.spectrum[i] - sum[i]) * multiply;
-      println(i + " :  " + sum[i]);
+      //println(i + " :  " + sum[i]);
     }
 
     // red
@@ -139,5 +139,33 @@ class Art {
     int ampScale = (int)(amplitude.analyze() * (height/4) * 2);
 
     return ampScale;
+  }
+
+  void drawWave() {
+
+    loadPixels();
+
+    waveform.analyze();
+    int mid = height / 2;
+
+    color cDark = color(100);
+    color cBright = color(200);
+
+    for (int col = 0; col < width; col++) {
+      for (int row = 0; row < height; row++) {
+
+        float o = waveform.data[col] * 1000;
+        int offset = (int)o;
+        println(offset);
+
+        if (mid + abs(offset) < row && mid - abs(offset) > row) {
+          pixels[row * width + col] = cDark;
+        }
+        else {
+          pixels[row * width + col] = cBright;
+        }
+      }
+    }
+    updatePixels();
   }
 }

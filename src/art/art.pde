@@ -4,7 +4,7 @@ ArrayList<ShapeGenerator> shapes = new ArrayList<ShapeGenerator>();
 ArrayList<CircleGenerator> circles = new ArrayList<CircleGenerator>();
 
 // analyze
-SoundFile audioFile;
+SoundFile sample;
 BeatDetector beatDetector;
 FFT fft;
 Amplitude amplitude;
@@ -18,40 +18,48 @@ int samples = 100;
 
 void setup() {
 
-  size(displayWidth, displayHeight);
+  size(displayWidth, displayHeight, P2D);
   background(255);
   smooth();
 
-  audioFile = new SoundFile(this, "ChillLofi.mp3");
-  audioFile.play();
+  sample = new SoundFile(this, "ChillLofi.mp3");
+  sample.play();
 
   beatDetector = new BeatDetector(this);
-  beatDetector.input(audioFile);
+  beatDetector.input(sample);
   beatDetector.sensitivity(140);
 
   barWidth = width/float(bands);
   fft = new FFT(this, bands);
-  fft.input(audioFile);
+  fft.input(sample);
 
   amplitude = new Amplitude(this);
-  amplitude.input(audioFile);
+  amplitude.input(sample);
 
   waveform = new Waveform(this, samples);
-  waveform.input(audioFile);
+  waveform.input(sample);
 
 }
 
 void draw() {
+  waveform.analyze();
+
+  for (int i = 0; i < samples; i++) {
+    println(i + " :   " + waveform.data[i]);
+  }
+
+
+
+/*
+  drawBackground();
+  drawShape();
 
   if (frameCount % 4 == 0) {
 
-    drawBackground();
-    drawShape();
-    filter(BLUR, 5);
     for (int i = 0; i < shapes.size(); i++) {
       shapes.get(i).redrawShape();
     }
-  }
+  }*/
 }
 
 void drawBackground() {
@@ -109,7 +117,7 @@ color generateFFTColor(int brightness, int intensity) {
   fft.analyze();
   for (int i = 0; i < bands; i++) {
     sum[i] += (fft.spectrum[i] - sum[i]) * multiply;
-    println(i + " :  " + sum[i]);
+    //println(i + " :  " + sum[i]);
   }
 
   // red
@@ -155,7 +163,9 @@ int getBeatEnergy() {
 
 int getAmplitude() {
 
-  int ampScale = (int)(amplitude.analyze() * (height/4) * 2);
+  //int ampScale = (int)(amplitude.analyze());// * (height/4) * 2);
+  float ampScale = amplitude.analyze();
+  println(ampScale);
 
-  return ampScale;
+  return 0;
 }
