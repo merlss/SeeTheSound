@@ -1,19 +1,20 @@
 import controlP5.*;
 import processing.sound.*;
 
-import ddf.minim.analysis.*;
-import ddf.minim.*;
-import ddf.minim.signals.*;
-
-
-Minim minim;
-AudioOutput out;
 
 //general
 float dWidth;
 float dHeight;
 color bgColor = color(46,46,72,255);
 color lightBgColor = color(116,116,142,255);
+
+//draw
+Art art;
+boolean isDrawing = false;
+BeatDetector beatDetector;
+FFT fft;
+Amplitude amplitude;
+Waveform waveform;
 
 // ui Elements
 ControlP5 ui;
@@ -116,8 +117,7 @@ void setup() {
 
   sound = new Sound(this);
 
-  minim = new Minim(this);
-  out = minim.getLineOut(Minim.STEREO);
+
 
   sineWidth = width/2+width/4;
   sineXIncrement = (TWO_PI / sinePeriod) * sineWaveResolution;
@@ -157,6 +157,12 @@ void setup() {
     updatePixels();
   }
 
+  art = new Art();
+  beatDetector = new BeatDetector(this);
+  fft = new FFT(this, 32);
+  amplitude = new Amplitude(this);
+  waveform = new Waveform(this, 100);
+
   loadMainScreen();
 }
 
@@ -177,6 +183,14 @@ void draw() {
   }
   if (paused) {
     drawPauseScreen();
+  }
+  if (isDrawing) {
+    for (int i = 0; i < art.shapes.size(); i++) {
+      art.shapes.get(i).redrawShape();
+    }
+    if (frameCount % 4 == 0) {
+      art.drawShape();
+    }
   }
   if (currentPage == "loadMainScreen") {
     drawMainScreen();
@@ -257,6 +271,7 @@ void loadSongDrawPage() {
     float xPos = xStep*4;
     float space = 12;
     if (c1B == null) {
+      art.setupArt(audioFile, beatDetector, amplitude, waveform, fft);
       c1B = button("C", "C", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
       xPos += xStep + space;
       d1B = button("D", "D", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
@@ -737,12 +752,16 @@ void renderWave() {
 
 void pauseDraw() {
   paused = true;
+  isDrawing = false;
+  println("out Of Draw");
   if (audioFile != null) {
     audioFile.pause();
   }
 }
 void stopDraw() {
   paused = false;
+  isDrawing = false;
+  println("out Of Draw");
   if (audioFile != null) {
     audioFile.stop();
     audioFile = null;
@@ -750,6 +769,8 @@ void stopDraw() {
 }
 
 void startDraw() {
+  isDrawing = true;
+  println("inside Of Draw");
   paused = false;
   if (audioFile != null) {
     audioFile.play();
@@ -790,6 +811,7 @@ void keyPressed(KeyEvent e) {
 
   }
   if (value != 0) {
+
     playNote(value, pressedKey);
   }
   key = 0;

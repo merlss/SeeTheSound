@@ -4,7 +4,7 @@ ArrayList<ShapeGenerator> shapes = new ArrayList<ShapeGenerator>();
 ArrayList<CircleGenerator> circles = new ArrayList<CircleGenerator>();
 
 // analyze
-SoundFile sample;
+SoundFile audioFile;
 BeatDetector beatDetector;
 FFT fft;
 Amplitude amplitude;
@@ -18,26 +18,26 @@ int samples = 100;
 
 void setup() {
 
-  size(displayWidth, displayHeight, P3D);
+  size(displayWidth, displayHeight);
   background(255);
   smooth();
 
-  sample = new SoundFile(this, "ChillLofi.mp3");
-  sample.play();
+  audioFile = new SoundFile(this, "ChillLofi.mp3");
+  audioFile.play();
 
   beatDetector = new BeatDetector(this);
-  beatDetector.input(sample);
+  beatDetector.input(audioFile);
   beatDetector.sensitivity(140);
 
   barWidth = width/float(bands);
   fft = new FFT(this, bands);
-  fft.input(sample);
+  fft.input(audioFile);
 
   amplitude = new Amplitude(this);
-  amplitude.input(sample);
+  amplitude.input(audioFile);
 
   waveform = new Waveform(this, samples);
-  waveform.input(sample);
+  waveform.input(audioFile);
 
 }
 
@@ -47,7 +47,7 @@ void draw() {
 
     drawBackground();
     drawShape();
-
+    filter(BLUR, 5);
     for (int i = 0; i < shapes.size(); i++) {
       shapes.get(i).redrawShape();
     }
