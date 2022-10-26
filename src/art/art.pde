@@ -3,7 +3,6 @@ import processing.sound.*;
 ArrayList<ShapeGenerator> shapes = new ArrayList<ShapeGenerator>();
 ArrayList<CircleGenerator> circles = new ArrayList<CircleGenerator>();
 
-
 // analyze
 SoundFile sample;
 BeatDetector beatDetector;
@@ -22,9 +21,8 @@ void setup() {
   size(displayWidth, displayHeight, P3D);
   background(255);
   smooth();
-  frameRate(16);
 
-  sample = new SoundFile(this, "Power.mp3");
+  sample = new SoundFile(this, "ChillLofi.mp3");
   sample.play();
 
   beatDetector = new BeatDetector(this);
@@ -45,10 +43,15 @@ void setup() {
 
 void draw() {
 
-  drawShape();
+  if (frameCount % 4 == 0) {
 
-  //drawBackground();
+    drawBackground();
+    drawShape();
 
+    for (int i = 0; i < shapes.size(); i++) {
+      shapes.get(i).redrawShape();
+    }
+  }
 }
 
 void drawBackground() {
@@ -59,9 +62,10 @@ void drawBackground() {
     waveform.analyze();
     float waveValueX = random(width);
     float waveValueY = map(waveform.data[0], -1, 1, 0, height);
-    color col = generateFFTColor(0);
-    CircleGenerator gen = new CircleGenerator(waveValueX, waveValueY, amp, col);
-    gen.setDepth(10);
+    color col = generateFFTColor(100, 0);
+    //color col = color(80);
+    CircleGenerator gen = new CircleGenerator(waveValueX, waveValueY, amp, col, -20);
+    //gen.setDepth(10);
     circles.add(gen);
     gen.drawShape();
   }
@@ -72,29 +76,31 @@ void drawShape() {
 
     int beatEnergy = getBeatEnergy();
 
-    if (beatEnergy > 15) {
+    if (beatEnergy > 30) {
       float waveValueX = random(30, displayWidth-30);
       float waveValueY = random(30, displayHeight-30);
-      color col = generateFFTColor(20);
-      ShapeGenerator gen = new ShapeGenerator(waveValueX, waveValueY, beatEnergy, col);
-      shapes.add(gen);
+      color col = generateFFTColor(-10, 50);
+      int radius = beatEnergy - 20;
+      ShapeGenerator gen = new ShapeGenerator(waveValueX, waveValueY, radius, col);
       gen.initShape();
       gen.drawShape();
+      shapes.add(gen);
     }
   }
 
-  for (int i = 0; i < shapes.size(); i++) {
-    ShapeGenerator thisShape = shapes.get(i);
-    if (!thisShape.isFinalDrawed()) {
-      thisShape.drawShape();
-    }
-    else {
-      shapes.remove(i);
-    }
-  }
+  /*
+    for (int i = 0; i < shapes.size(); i++) {
+      ShapeGenerator thisShape = shapes.get(i);
+      if (!thisShape.isFinalDrawed()) {
+        thisShape.drawShape();
+      }
+      else {
+        shapes.remove(i);
+      }
+    }*/
 }
 
-color generateFFTColor(int intensity) {
+color generateFFTColor(int brightness, int intensity) {
 
   float[] sum = new float[bands];
   float multiply = 200;
@@ -103,19 +109,31 @@ color generateFFTColor(int intensity) {
   fft.analyze();
   for (int i = 0; i < bands; i++) {
     sum[i] += (fft.spectrum[i] - sum[i]) * multiply;
+    println(i + " :  " + sum[i]);
   }
 
-  r = 255 - sum[1] + sum[5];
-  g = 255 - sum[2] + sum[6];
-  b = 255 - sum[3] + sum[7];
+  // red
+  if (sum[4] < sum[7]+sum[8]) {
+    r = 255 - sum[1] - sum[2] - intensity;
+    g = sum[5] + sum[6] + brightness;
+    b = sum[3] + sum[4] + brightness;
+  }
+  // blue
+  else if (sum[2] < sum[3]) {
+    r = sum[2] + sum[4] + brightness;
+    g = sum[5] + sum[6] + brightness;
+    b = 255 - sum[1] - sum[3] - intensity;
+  }
+  // green
+  else {
+    r = sum[5] + sum[6] + brightness;
+    g = 255 - sum[1] - sum[2] - intensity;
+    b = sum[2] + sum[3] + brightness;
+  }
 
-  r -= intensity;
-  g -= intensity;
-  b -= intensity;
-
-  constrain(r, 0, 255);
-  constrain(g, 0, 255);
-  constrain(b, 0, 255);
+  constrain(r, 10, 200);
+  constrain(g, 10, 200);
+  constrain(b, 10, 200);
 
   color col = color(r, g, b);
 
@@ -138,7 +156,6 @@ int getBeatEnergy() {
 int getAmplitude() {
 
   int ampScale = (int)(amplitude.analyze() * (height/4) * 2);
-  println(ampScale);
 
   return ampScale;
 }
