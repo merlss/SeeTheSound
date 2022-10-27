@@ -85,6 +85,14 @@ SinOsc oscillator1;
 SinOsc oscillator2;
 String osc1 = "0";
 String osc2 = "0";
+Env env;
+float atkTime = 0.005;
+float releaseTime = 0.2;
+float susLevel = 0.3;
+float susTime = 0.4;
+int susPedal = 1;
+
+
 color piano_button_color = color(255);
 color piano_button_hoverColor = color(200);
 color piano_button_activeColor = color(150);
@@ -129,6 +137,7 @@ void setup() {
 
   oscillator1 = new SinOsc(this);
   oscillator2 = new SinOsc(this);
+  env = new Env(this);
 
   drawBackground = true;
   int rand = int(random(1,4));
@@ -204,6 +213,7 @@ void draw() {
   else if (currentPage == "loadSetupDrawSong") {
     drawSetupScreen();
   }
+
 }
 
 void drawMainScreen() {
@@ -488,6 +498,7 @@ void controlEvent(CallbackEvent event) {
 }
 
 void playNote(float pitch, String pressedKey) {
+  
   if (osc1.equals("0") == false && osc2.equals("0") == false) {
     return;
   }
@@ -495,18 +506,23 @@ void playNote(float pitch, String pressedKey) {
     osc2 = pressedKey;
     oscillator2.freq(pitch);
     oscillator2.play();
+    env.play(oscillator2, atkTime, susTime*susPedal, susLevel, releaseTime);
+
   }
   else if (osc1.equals("0") == true && osc2.equals("0") == false) {
     osc1 = pressedKey;
     oscillator1.freq(pitch);
     oscillator1.play();
+    env.play(oscillator1, atkTime, susTime*susPedal, susLevel, releaseTime);
   }
   else {
     osc1 = pressedKey;
     oscillator1.freq(pitch);
     oscillator1.play();
+    env.play(oscillator1, atkTime, susTime*susPedal, susLevel, releaseTime);
   }
 }
+
 
 void stopNote(String pressedKey) {
   if (pressedKey.equals(osc1) == true) {
@@ -815,6 +831,7 @@ void keyPressed(KeyEvent e) {
     case '.': value = 587.33; if (osc1 == "d2" || osc2 == "d2") {return;} d2B.setColorBackground(piano_button_activeColor); pressedKey = "d2";break;
     case 'ö': value = 622.25; if (osc1 == "d2#" || osc2 == "d2#") {return;} d2hB.setColorBackground(pianoHalf_button_activeColor); pressedKey = "d2#";break;
     case '-': value = 659.25; if (osc1 == "e2" || osc2 == "e2") {return;} e2B.setColorBackground(piano_button_activeColor); pressedKey = "e2"; break;
+    case ' ': susPedal = 4; break;
 
   }
   if (value != 0) {
@@ -843,6 +860,6 @@ void keyReleased() {
     case '.':println("in"); stopNote("d2"); d2B.setColorBackground(piano_button_color); break;
     case 'ö':println("in"); stopNote("d2#"); d2hB.setColorBackground(pianoHalf_button_color); break;
     case '-':println("in"); stopNote("e2"); e2B.setColorBackground(piano_button_color); break;
-
+    case ' ': susPedal = 1; break;
   }
 }
