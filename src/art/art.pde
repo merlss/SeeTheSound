@@ -18,7 +18,7 @@ int samples = 100;
 
 void setup() {
 
-  size(displayWidth, displayHeight, P3D);
+  size(displayWidth, displayHeight, P2D);
   background(255);
   smooth();
 
@@ -42,16 +42,24 @@ void setup() {
 }
 
 void draw() {
+  waveform.analyze();
+
+  for (int i = 0; i < samples; i++) {
+    println(i + " :   " + waveform.data[i]);
+  }
+
+
+
+/*
+  drawBackground();
+  drawShape();
 
   if (frameCount % 4 == 0) {
-
-    drawBackground();
-    drawShape();
 
     for (int i = 0; i < shapes.size(); i++) {
       shapes.get(i).redrawShape();
     }
-  }
+  }*/
 }
 
 void drawBackground() {
@@ -109,7 +117,7 @@ color generateFFTColor(int brightness, int intensity) {
   fft.analyze();
   for (int i = 0; i < bands; i++) {
     sum[i] += (fft.spectrum[i] - sum[i]) * multiply;
-    println(i + " :  " + sum[i]);
+    //println(i + " :  " + sum[i]);
   }
 
   // red
@@ -155,7 +163,9 @@ int getBeatEnergy() {
 
 int getAmplitude() {
 
-  int ampScale = (int)(amplitude.analyze() * (height/4) * 2);
+  //int ampScale = (int)(amplitude.analyze());// * (height/4) * 2);
+  float ampScale = amplitude.analyze();
+  println(ampScale);
 
-  return ampScale;
+  return 0;
 }
