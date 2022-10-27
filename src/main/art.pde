@@ -17,10 +17,16 @@ class Art {
   int scale = 5;
   float barWidth;
   int samples = width/2;
+  PixelQueue queue;
+  color defaultWaveBright;
+  color defaultWaveDark;
 
   int shapeTrigger = 20;
 
-  void setupArt(SoundFile file, BeatDetector beat, Amplitude amp, Waveform wave, FFT ffT ) {
+  void setupArt(SoundFile file, BeatDetector beat, Amplitude amp, Waveform wave, FFT ffT, PixelQueue q, color bright, color dark ) {
+    defaultWaveDark = dark;
+    defaultWaveBright = bright;
+    queue = q;
     beatDetector = beat;
     amplitude = amp;
     waveform = wave;
@@ -151,10 +157,19 @@ class Art {
     waveform.analyze();
     int mid = height / 2;
 
-    color cDark = color(100);
-    color cBright = color(200);
 
-    for (int col = 0; col < width/2; col++) {
+
+    Column column = new Column(waveform.data[0], defaultWaveDark, defaultWaveBright);
+    if (queue.size == width-1) {
+      queue.dequeue();
+      queue.dequeue();
+
+    }
+    queue.enqueue(column);
+    queue.enqueue(column);
+
+    queue.drawPixels();
+    /*for (int col = 0; col < width/2; col++) {
 
       int offset = (int)map(waveform.data[col], -1, 1, -height/4, height/4);
 
@@ -170,7 +185,7 @@ class Art {
           pixels[row * width + col*2 + 1] = cBright;
         }
       }
-    }
+    }*/
     updatePixels();
   }
 

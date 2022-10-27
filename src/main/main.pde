@@ -16,6 +16,9 @@ FFT fft;
 Amplitude amplitude;
 Waveform waveform;
 int samples = width/2;
+color defaultWaveColor = color(50);
+color defaultWaveBright = color(255);
+color defaultWaveDark = color(0);
 
 // ui Elements
 ControlP5 ui;
@@ -162,7 +165,7 @@ void setup() {
   beatDetector = new BeatDetector(this);
   fft = new FFT(this, 32);
   amplitude = new Amplitude(this);
-  waveform = new Waveform(this, width/2);
+  waveform = new Waveform(this, 1);
 
   loadMainScreen();
 }
@@ -274,7 +277,8 @@ void loadSongDrawPage() {
     float xPos = xStep*4;
     float space = 12;
     if (c1B == null) {
-      art.setupArt(audioFile, beatDetector, amplitude, waveform, fft);
+      PixelQueue pixelQueue = new PixelQueue(defaultWaveBright, defaultWaveDark);
+      art.setupArt(audioFile, beatDetector, amplitude, waveform, fft, pixelQueue, defaultWaveBright, defaultWaveDark);
       c1B = button("C", "C", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
       xPos += xStep + space;
       d1B = button("D", "D", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
