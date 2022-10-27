@@ -15,6 +15,7 @@ BeatDetector beatDetector;
 FFT fft;
 Amplitude amplitude;
 Waveform waveform;
+int samples = width/2;
 
 // ui Elements
 ControlP5 ui;
@@ -161,7 +162,7 @@ void setup() {
   beatDetector = new BeatDetector(this);
   fft = new FFT(this, 32);
   amplitude = new Amplitude(this);
-  waveform = new Waveform(this, width);
+  waveform = new Waveform(this, width/2);
 
   loadMainScreen();
 }
@@ -185,13 +186,14 @@ void draw() {
     drawPauseScreen();
   }
   if (isDrawing) {
+    //art.initShapes();
     art.drawWave();
-    for (int i = 0; i < art.shapes.size(); i++) {
+    /*for (int i = 0; i < art.shapes.size(); i++) {
       art.shapes.get(i).redrawShape();
     }
     if (frameCount % 4 == 0) {
       art.drawShape();
-    }
+    }*/
   }
   if (currentPage == "loadMainScreen") {
     drawMainScreen();

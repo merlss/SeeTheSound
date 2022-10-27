@@ -16,7 +16,9 @@ class Art {
   int bands = 32;
   int scale = 5;
   float barWidth;
-  int samples = width;
+  int samples = width/2;
+
+  int shapeTrigger = 20;
 
   void setupArt(SoundFile file, BeatDetector beat, Amplitude amp, Waveform wave, FFT ffT ) {
     beatDetector = beat;
@@ -24,7 +26,7 @@ class Art {
     waveform = wave;
     fft = ffT;
     beatDetector.input(file);
-    beatDetector.sensitivity(140);
+    beatDetector.sensitivity(400);
 
     barWidth = width/float(bands);
     fft.input(file);
@@ -33,10 +35,10 @@ class Art {
 
     waveform.input(file);
   }
-
+/*
   void drawBackground() {
 
-    int amp = getAmplitude();
+    int amp = 0;
 
     if (amp > 300) {
       waveform.analyze();
@@ -78,8 +80,8 @@ class Art {
         else {
           shapes.remove(i);
         }
-      }*/
-  }
+      }
+  }*/
 
   color generateFFTColor(int brightness, int intensity) {
 
@@ -134,9 +136,10 @@ class Art {
     return (int)max;
   }
 
-  int getAmplitude() {
+  float getAmplitude() {
 
-    int ampScale = (int)(amplitude.analyze() * (height/4) * 2);
+    //int ampScale = (int)(amplitude.analyze() * (height/4) * 2);
+    float ampScale = amplitude.analyze();
 
     return ampScale;
   }
@@ -151,21 +154,58 @@ class Art {
     color cDark = color(100);
     color cBright = color(200);
 
-    for (int col = 0; col < width; col++) {
+    for (int col = 0; col < width/2; col++) {
+
+      int offset = (int)map(waveform.data[col], -1, 1, -height/4, height/4);
+
+      println(offset);
+
       for (int row = 0; row < height; row++) {
-
-        float o = waveform.data[col] * 1000;
-        int offset = (int)o;
-        println(offset);
-
-        if (mid + abs(offset) < row && mid - abs(offset) > row) {
-          pixels[row * width + col] = cDark;
+        if (mid - abs(offset) <= row && mid + abs(offset) >= row) {
+          pixels[row * width + col*2] = cDark;
+          pixels[row * width + col*2 + 1] = cDark;
         }
         else {
-          pixels[row * width + col] = cBright;
+          pixels[row * width + col*2] = cBright;
+          pixels[row * width + col*2 + 1] = cBright;
         }
       }
     }
     updatePixels();
+  }
+
+  void initShapes() {
+
+    if (beatDetector.isBeat()) {
+
+      int beatEnergy = getBeatEnergy();
+
+      if (beatEnergy > shapeTrigger) {
+        shapeTrigger = beatEnergy - 5;
+
+        float x = random(30, displayWidth-30);
+        float y = random(30, displayHeight-30);
+        float amp = map(getAmplitude(), 0, 1, 0, 200);
+        println("Shape   " + amp);
+        color col = generateFFTColor(-10, 50);
+        //ShapeGenerator gen = new ShapeGenerator(x, y, (int)amp, col);
+        //gen.initShape();
+        //gen.drawShape();
+        //shapes.add(gen);
+
+      }
+      else if (beatEnergy > 10) {
+
+        float x = random(30, displayWidth-30);
+        float y = random(30, displayHeight-30);
+        float amp = map(getAmplitude(), 0, 1, 0, 100);
+        println("Circle   " + amp);
+        color col = generateFFTColor(100, 0);
+        //CircleGenerator gen = new CircleGenerator(x, y, (int)amp, col);
+        //circles.add(gen);
+        //gen.drawShape();
+
+      }
+    }
   }
 }

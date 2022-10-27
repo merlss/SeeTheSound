@@ -59,7 +59,7 @@ class ShapeGenerator extends Generator {
         float y1 = strokePointList_y.get(i);
         float y2 = strokePointList_y.get(i+1);
         stroke(col);
-        drawLine(x1, y1, 0, x2, y2, 0, stroke.getWeight(i));
+        drawLine(x1, y1, x2, y2, stroke.getWeight(i));
       }
     }
     popMatrix();
@@ -89,7 +89,7 @@ class ShapeGenerator extends Generator {
 
         stroke(col);
         int w = circleRad + 5;
-        drawLine(currPoints_x[i], currPoints_y[i], 0, nextX, nextY, 0, w);
+        drawLine(currPoints_x[i], currPoints_y[i], nextX, nextY, w);
 
         currPoints_x[i] = nextX;
         currPoints_y[i] = nextY;
@@ -105,14 +105,12 @@ class ShapeGenerator extends Generator {
     }
   }
 
-  void drawLine(float x1, float y1, float z1, float x2, float y2, float z2, int weight) {
+  void drawLine(float x1, float y1, float x2, float y2, int weight) {
 
     strokeWeight(weight);
-
-    float w = round(weight/8);
+    strokeJoin(ROUND);
+    strokeCap(ROUND);
 
     line(x1, y1, x2, y2);
-    ellipse(x1, y1, w, w);
-    ellipse(x2, y2, w, w);
   }
 }
