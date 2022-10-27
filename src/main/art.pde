@@ -198,29 +198,52 @@ class Art {
       if (beatEnergy > shapeTrigger) {
         shapeTrigger = beatEnergy - 5;
 
-        float x = random(30, displayWidth-30);
-        float y = random(30, displayHeight-30);
-        float amp = map(getAmplitude(), 0, 1, 0, 200);
+        float x = random(30, width-30);
+        float y = random(30, height-30);
+        float amp = map(getAmplitude(), 0, 1, 0, 40);
         println("Shape   " + amp);
         color col = generateFFTColor(-10, 50);
-        //ShapeGenerator gen = new ShapeGenerator(x, y, (int)amp, col);
-        //gen.initShape();
-        //gen.drawShape();
-        //shapes.add(gen);
+        ShapeGenerator gen = new ShapeGenerator(x, y, (int)amp, col);
+        gen.initShape();
+        gen.drawShape();
+        shapes.add(gen);
 
       }
-      else if (beatEnergy > 10) {
+      else if (beatEnergy > 5) {
 
-        float x = random(30, displayWidth-30);
-        float y = random(30, displayHeight-30);
-        float amp = map(getAmplitude(), 0, 1, 0, 100);
+        float x = random(50, width-50);
+        float y = random(50, height-50);
+        float amp = map(getAmplitude(), 0, 1, 20, 100);
         println("Circle   " + amp);
         color col = generateFFTColor(100, 0);
-        //CircleGenerator gen = new CircleGenerator(x, y, (int)amp, col);
-        //circles.add(gen);
-        //gen.drawShape();
+        CircleGenerator gen = new CircleGenerator(x, y, (int)amp, col);
+        circles.add(gen);
+        gen.drawShape();
 
       }
+    }
+  }
+
+  void drawSplash() {
+    for (int i = 0; i < circles.size(); i++) {
+      circles.get(i).drawShape();
+    }
+    
+    for (int i = 0; i < shapes.size(); i++) {
+      ShapeGenerator thisShape = shapes.get(i);
+      if (!thisShape.isFinalDrawed()) {
+        thisShape.drawShape();
+      }
+    }
+  }
+
+  void redraw() {
+    for (int i = 0; i < circles.size(); i++) {
+      circles.get(i).redrawShape();
+    }
+
+    for (int i = 0; i < shapes.size(); i++) {
+      shapes.get(i).redrawShape();
     }
   }
 }

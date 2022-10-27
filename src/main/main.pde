@@ -198,14 +198,17 @@ void draw() {
     drawPauseScreen();
   }
   if (isDrawing) {
-    //art.initShapes();
     art.drawWave();
+    art.redraw();
+
+    art.initShapes();
+
     /*for (int i = 0; i < art.shapes.size(); i++) {
       art.shapes.get(i).redrawShape();
-    }
-    if (frameCount % 4 == 0) {
-      art.drawShape();
     }*/
+    if (frameCount % 4 == 0) {
+      art.drawSplash();
+    }
   }
   if (currentPage == "loadMainScreen") {
     drawMainScreen();
@@ -498,7 +501,7 @@ void controlEvent(CallbackEvent event) {
 }
 
 void playNote(float pitch, String pressedKey) {
-  
+
   if (osc1.equals("0") == false && osc2.equals("0") == false) {
     return;
   }
