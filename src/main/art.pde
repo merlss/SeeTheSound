@@ -102,22 +102,22 @@ class Art {
     }
 
     // red
-    if (sum[4] < sum[7]+sum[8]) {
+    if (sum[4] < sum[7]+sum[9]) {
       r = 255 - sum[1] - sum[2] - intensity;
       g = sum[5] + sum[6] + brightness;
       b = sum[3] + sum[4] + brightness;
     }
-    // blue
+    // green
     else if (sum[2] < sum[3]) {
+      r = sum[5] + sum[6] + brightness;
+      g = 255 - sum[1] - sum[2] - sum[3] - intensity;
+      b = sum[2] + sum[3] + brightness;
+    }
+    // blue
+    else {
       r = sum[2] + sum[4] + brightness;
       g = sum[5] + sum[6] + brightness;
       b = 255 - sum[1] - sum[3] - intensity;
-    }
-    // green
-    else {
-      r = sum[5] + sum[6] + brightness;
-      g = 255 - sum[1] - sum[2] - intensity;
-      b = sum[2] + sum[3] + brightness;
     }
 
     constrain(r, 10, 200);
@@ -213,7 +213,7 @@ class Art {
 
         float x = random(50, width-50);
         float y = random(50, height-50);
-        float amp = map(getAmplitude(), 0, 1, 20, 100);
+        float amp = map(getAmplitude(), 0, 1, 20, 150);
         println("Circle   " + amp);
         color col = generateFFTColor(100, 0);
         CircleGenerator gen = new CircleGenerator(x, y, (int)amp, col);
@@ -228,7 +228,7 @@ class Art {
     for (int i = 0; i < circles.size(); i++) {
       circles.get(i).drawShape();
     }
-    
+
     for (int i = 0; i < shapes.size(); i++) {
       ShapeGenerator thisShape = shapes.get(i);
       if (!thisShape.isFinalDrawed()) {

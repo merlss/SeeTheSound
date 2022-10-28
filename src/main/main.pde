@@ -180,16 +180,14 @@ void draw() {
   if (isDrawing) {
 
     art.drawWave();
-    art.redraw();
 
     art.initShapes();
 
-    /*for (int i = 0; i < art.shapes.size(); i++) {
-      art.shapes.get(i).redrawShape();
-    }*/
     if (frameCount % 4 == 0) {
       art.drawSplash();
     }
+
+    art.redraw();
   }
   if (currentPage == "loadMainScreen") {
     drawMainScreen();
