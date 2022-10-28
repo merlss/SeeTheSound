@@ -19,9 +19,16 @@ class PixelQueue {
   }
 
   void drawPixels() {
+    int i = 0;
     for (int col = 0; col < width; col++) {
       for (int row = 0; row < height; row++) {
-        pixels[row * width + col] = columns[col].colors[row];
+        if (front + col < width) {
+          i = front + col;
+        }
+        else {
+          i = front + col - width;
+        }
+        pixels[row * width + col] = columns[i].colors[row];
       }
     }
   }
