@@ -37,7 +37,7 @@ class PixelQueue {
       rear++;
       size++;
     }
-    else if (rear == max-1) {
+    else if (rear >= max-1) {
       rear = 0;
       size++;
     }
