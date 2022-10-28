@@ -17,8 +17,8 @@ Amplitude amplitude;
 Waveform waveform;
 int samples = width/2;
 color defaultWaveColor = color(50);
-color defaultWaveBright = color(116,116,142,255);
-color defaultWaveDark = color(46,46,72,255);;
+color defaultWaveBright = color(215,210,190,255);
+color defaultWaveDark = color(160,150,150,255);
 
 // ui Elements
 ControlP5 ui;
