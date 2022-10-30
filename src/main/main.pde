@@ -104,6 +104,8 @@ Button saveImageButton;
 
 //selfPlayDraw
 boolean inSelfPlayDraw = false;
+boolean muted = true;
+Button muteButton;
 
 color piano_button_color = color(255);
 color piano_button_hoverColor = color(200);
@@ -296,8 +298,8 @@ void loadSongDrawPage() {
     float xStep = calcWidth(dWidth/18);
     float xPos = xStep*4;
     float space = calcWidth(12);
-    if (pauseDrawButton == null) {
-      pauseDrawButton = button("handlePause", "||", calcWidth(1850), calcHeight(1000), calcWidth(50), calcHeight(50), button_color, button_hoverColor, button_pressColor, calcFontSize(35), color(255));
+    if (saveImageButton == null) {
+      //pauseDrawButton = button("handlePause", "||", calcWidth(1850), calcHeight(1000), calcWidth(50), calcHeight(50), button_color, button_hoverColor, button_pressColor, calcFontSize(35), color(255));
       saveImageButton = button("handleSaveImage", "save", calcWidth(1850), calcHeight(900), calcWidth(120), calcHeight(50), button_color, button_hoverColor, button_pressColor, calcFontSize(35), color(255));
     }
     if (c1B == null) {
@@ -354,7 +356,7 @@ void loadSongDrawPage() {
       a1hB.show();
       c2hB.show();
       d2hB.show();
-      pauseDrawButton.show();
+      //pauseDrawButton.show();
       saveImageButton.show();
     }
   }
@@ -372,6 +374,9 @@ void loadSelfPlayingDraw() {
   float xStep = calcWidth(dWidth/18);
   float xPos = xStep * 4;
   float space = calcWidth(12);
+  if (muteButton == null) {
+    muteButton = button("handleMute", "unmute", calcWidth(1800), calcHeight(900), calcWidth(150), calcHeight(50), color(80), color(60), color(40), calcFontSize(35), color(255));
+  }
   if (c1B == null) {
     c1B = button("C", "C", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
     xPos += xStep + space;
@@ -426,6 +431,7 @@ void loadSelfPlayingDraw() {
     a1hB.show();
     c2hB.show();
     d2hB.show();
+    muteButton.show();
   }
   startSelfDraw();
 }
@@ -651,6 +657,9 @@ void hideUIObjects() {
   if (saveImageButton != null) {
     saveImageButton.hide();
   }
+  if (muteButton != null) {
+    muteButton.hide();
+  }
   if (c1B != null) {
     c1B.hide();
     d1B.hide();
@@ -808,16 +817,19 @@ public void handlePause() {
 }
 
 public void handleSaveImage() {
-  pauseDrawButton.hide();
-  saveImageButton.hide();
-  hideKeyboard();
-
   save("screenshots/" + "screenshot" + screenShotIterator + ".jpg");
   screenShotIterator++;
+}
 
-  pauseDrawButton.show();
-  saveImageButton.show();
-  showKeyboard();
+public void handleMute() {
+  if (muted) {
+    muted = false;
+    muteButton.setLabel("mute");
+  }
+  else {
+    muted = true;
+    muteButton.setLabel("unmute");
+  }
 }
 
 public void hideKeyboard() {
