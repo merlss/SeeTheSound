@@ -9,12 +9,12 @@ class KeyboardData extends Art {
     int size = 0;
 
     if (value > 400) {
-      size = map((int)value, 400, 623, 150, 50);
+      size = (int)map(value, 400, 623, 150, 50);
       initCircle(size, col);
     }
     else {
 
-      size = map((int)value, 260, 400, 50, 10);
+      size = (int)map(value, 260, 400, 50, 10);
       initSplash(size, col);
     }
   }

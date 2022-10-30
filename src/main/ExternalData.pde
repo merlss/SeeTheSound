@@ -10,10 +10,6 @@ class ExternalData extends Art {
   int scale = 5;
   float barWidth;
   int samples = width/2;
-  PixelQueue queue;
-  color defaultWaveBright;
-  color defaultWaveDark;
-
   int shapeTrigger = 20;
 
   ExternalData() {
@@ -57,5 +53,43 @@ class ExternalData extends Art {
         initCircle((int)amp, col);
       }
     }
+  }
+
+  color generateFFTColor(int brightness, int intensity) {
+
+    float[] sum = new float[bands];
+    float multiply = 200;
+    float r, g, b;
+
+    fft.analyze();
+    for (int i = 0; i < bands; i++) {
+      sum[i] += (fft.spectrum[i] - sum[i]) * multiply;
+    }
+
+    // red
+    if (sum[4] < sum[7]+sum[9]) {
+      r = 255 - sum[1] - sum[2] - intensity;
+      g = sum[5] + sum[6] + brightness;
+      b = sum[3] + sum[4] + brightness;
+    }
+    // green
+    else if (sum[2] < sum[3]) {
+      r = sum[5] + sum[6] + brightness;
+      g = 255 - sum[1] - sum[2] - sum[3] - intensity;
+      b = sum[2] + sum[3] + brightness;
+    }
+    // blue
+    else {
+      r = sum[2] + sum[4] + brightness;
+      g = sum[5] + sum[6] + brightness;
+      b = 255 - sum[1] - sum[3] - intensity;
+    }
+
+    constrain(r, 10, 200);
+    constrain(g, 10, 200);
+    constrain(b, 10, 200);
+
+    color col = color(r, g, b);
+    return col;
   }
 }

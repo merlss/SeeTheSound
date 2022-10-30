@@ -9,7 +9,7 @@ color bgColor = color(46,46,72,255);
 color lightBgColor = color(116,116,142,255);
 
 //draw
-Art art;
+ExternalData externalArt;
 boolean isDrawing = false;
 BeatDetector beatDetector;
 FFT fft;
@@ -20,7 +20,7 @@ color defaultWaveColor = color(50);
 color defaultWaveBright = color(215,210,190,255);
 color defaultWaveDark = color(160,150,150,255);
 
-SelfmadeArt selfmadeArt;
+KeyboardData keyboardArt;
 
 // ui Elements
 ControlP5 ui;
@@ -94,7 +94,6 @@ float susLevel = 0.3;
 float susTime = 0.4;
 int susPedal = 1;
 
-
 //selfPlayDraw
 boolean inSelfPlayDraw = false;
 
@@ -134,8 +133,6 @@ void setup() {
 
   sound = new Sound(this);
 
-
-
   sineWidth = width/2+width/4;
   sineXIncrement = (TWO_PI / sinePeriod) * sineWaveResolution;
   sineYValues = new float[sineWidth/sineWaveResolution];
@@ -154,7 +151,8 @@ void setup() {
   }
   updatePixels();
 
-  art = new Art();
+  externalArt = new ExternalData();
+  keyboardArt = new KeyboardData();
   beatDetector = new BeatDetector(this);
   fft = new FFT(this, 32);
   amplitude = new Amplitude(this);
@@ -183,12 +181,12 @@ void draw() {
   }
   //println(isDrawing);
   if (isDrawing) {
-    art.drawWave();
-    art.initShapes();
+    externalArt.drawWave();
+    externalArt.initNewShape();
     if (frameCount % 4 == 0) {
-      art.drawSplash();
+      externalArt.drawSplash();
     }
-    art.redraw();
+    externalArt.redraw();
   }
   if (inSelfPlayDraw) {
 
@@ -347,7 +345,6 @@ void loadSongDrawPage() {
 }
 
 void loadSelfPlayingDraw() {
-
   String lastPage = currentPage;
   currentPage = "loadSelfPlayingDraw";
   background(bgColor);
@@ -356,8 +353,6 @@ void loadSelfPlayingDraw() {
   float xPos = xStep*4;
   float space = calcWidth(12);
   if (c1B == null) {
-    PixelQueue pixelQueue = new PixelQueue(defaultWaveBright, defaultWaveDark);
-    art.setupArt(audioFile, beatDetector, amplitude, waveform, fft, pixelQueue, defaultWaveBright, defaultWaveDark);
     c1B = button("C", "C", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
     xPos += xStep + space;
     d1B = button("D", "D", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
@@ -412,7 +407,6 @@ void loadSelfPlayingDraw() {
     c2hB.show();
     d2hB.show();
   }
-  startSelfDraw();
 }
 
 void controlEvent(CallbackEvent event) {
@@ -509,7 +503,7 @@ void controlEvent(CallbackEvent event) {
     if (event.getAction() == ControlP5.ACTION_PRESSED && pressedKey.equals("") == false) {
       println("in");
       playNote(value, pressedKey);
-      selfmadeArt.drawNewShape(value, color(50, 50, 180));
+      keyboardArt.initNewShape(value, color(50, 50, 180));
     }
     else if (event.getAction() == ControlP5.ACTION_RELEASED && pressedKey.equals("") == false) {
       println("out");
@@ -703,8 +697,8 @@ public void handleSetupContinue() {
   }
   if (fileName != null && prefix.equals("mp3")) {
     drawBackground = false;
-    PixelQueue pixelQueue = new PixelQueue(defaultWaveBright, defaultWaveDark);
-    art.setupArt(audioFile, beatDetector, amplitude, waveform, fft, pixelQueue, defaultWaveBright, defaultWaveDark);
+    PixelQueue pixelqueue = new PixelQueue(defaultWaveBright, defaultWaveDark);
+    externalArt.setupArt(audioFile, beatDetector, amplitude, waveform, fft, pixelqueue, defaultWaveBright, defaultWaveDark);
     loadSongDrawPage();
   }
   else {
@@ -718,7 +712,7 @@ public void handlePauseContinue() {
    if (currentPage.equals("loadSongDrawPage")) {
      loadSongDrawPage();
    }
-   else if (currentPage.equals("loadSelfPlayingDraw")) {
+   if (currentPage.equals("loadSelfPlayingDraw")) {
      loadSelfPlayingDraw();
    }
  }
@@ -822,10 +816,9 @@ void stopDraw() {
 }
 
 void startSelfDraw() {
-  inSelfPlayDraw = false;
+  inSelfPlayDraw = true;
   drawBackground = false;
   paused = false;
-  inSelfPlayDraw = true;
 }
 
 void startDraw() {
