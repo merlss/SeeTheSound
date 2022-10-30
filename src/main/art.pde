@@ -41,53 +41,6 @@ class Art {
 
     waveform.input(file);
   }
-/*
-  void drawBackground() {
-
-    int amp = 0;
-
-    if (amp > 300) {
-      waveform.analyze();
-      float waveValueX = random(width);
-      float waveValueY = map(waveform.data[0], -1, 1, 0, height);
-      color col = generateFFTColor(100, 0);
-      //color col = color(80);
-      CircleGenerator gen = new CircleGenerator(waveValueX, waveValueY, amp, col, -20);
-      //gen.setDepth(10);
-      circles.add(gen);
-      gen.drawShape();
-    }
-  }
-
-  void drawShape() {
-    if (beatDetector.isBeat()) {
-
-      int beatEnergy = getBeatEnergy();
-      //println(beatEnergy);
-
-      if (beatEnergy > 30) {
-        float waveValueX = random(30, displayWidth-30);
-        float waveValueY = random(30, displayHeight-30);
-        color col = generateFFTColor(-10, 50);
-        int radius = beatEnergy - 20;
-        ShapeGenerator gen = new ShapeGenerator(waveValueX, waveValueY, radius, col);
-        gen.initShape();
-        gen.drawShape();
-        shapes.add(gen);
-      }
-    }
-
-    /*
-      for (int i = 0; i < shapes.size(); i++) {
-        ShapeGenerator thisShape = shapes.get(i);
-        if (!thisShape.isFinalDrawed()) {
-          thisShape.drawShape();
-        }
-        else {
-          shapes.remove(i);
-        }
-      }
-  }*/
 
   color generateFFTColor(int brightness, int intensity) {
 

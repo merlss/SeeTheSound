@@ -20,6 +20,8 @@ color defaultWaveColor = color(50);
 color defaultWaveBright = color(215,210,190,255);
 color defaultWaveDark = color(160,150,150,255);
 
+SelfmadeArt selfmadeArt;
+
 // ui Elements
 ControlP5 ui;
 
@@ -178,15 +180,11 @@ void draw() {
   }
   //println(isDrawing);
   if (isDrawing) {
-
     art.drawWave();
-
     art.initShapes();
-
     if (frameCount % 4 == 0) {
       art.drawSplash();
     }
-
     art.redraw();
   }
   if (currentPage == "loadMainScreen") {
@@ -483,6 +481,7 @@ void controlEvent(CallbackEvent event) {
     if (event.getAction() == ControlP5.ACTION_PRESSED && pressedKey.equals("") == false) {
       println("in");
       playNote(value, pressedKey);
+      selfmadeArt.drawNewShape(value, color(50, 50, 180));
     }
     else if (event.getAction() == ControlP5.ACTION_RELEASED && pressedKey.equals("") == false) {
       println("out");
