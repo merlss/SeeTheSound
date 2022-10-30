@@ -53,7 +53,7 @@ class MicrophoneData {
       circs[x].display();
     }
   }
-
+/*
   void mousePressed() {
     background(255);
     println(frameRate);
@@ -70,5 +70,5 @@ class MicrophoneData {
     if (key=='1') ANIMATE= true;
     if (key=='2') ANIMATE= false;
     println("Animate?: ", ANIMATE);
-  }
+  }*/
 }
