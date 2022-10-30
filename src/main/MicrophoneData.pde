@@ -12,28 +12,22 @@ class MicrophoneData {
   AudioIn in;
   float ampt;
 
-  void setupMic() {
+  void setupMic(AudioIn _in, Amplitude _amp) {
 
-    noStroke();
-    smooth();
     circs = new Circ[howMany];
+    in = _in;
+    amp = _amp;
+    in.start();
+    amp.input(in);
 
     for (int i = 0; i < howMany; i++) {
 
       circs[i] = new Circ(random(width), random(height), random(10)+5, cols[int(random(3))], strs[int(random(3))], 2, random(-3, 3));
       circs[i].display();
     }
-
-    amp = new Amplitude(this);
-    in = new AudioIn(this, 0);
-    in.start();
-    amp.input(in);
-
   }
 
   void drawCircles() {
-
-    background(0, 0, 0);
 
     ampt = amp.analyze();
     println(ampt);
@@ -58,5 +52,23 @@ class MicrophoneData {
 
       circs[x].display();
     }
+  }
+
+  void mousePressed() {
+    background(255);
+    println(frameRate);
+
+    for (int x = 0; x < howMany; x++) { //
+      circs[x].update();
+      circs[x].xpos = random(0, width);
+      circs[x].ypos = random(0, height);
+      circs[x].display();
+    }
+  }
+
+  void keyPressed() {
+    if (key=='1') ANIMATE= true;
+    if (key=='2') ANIMATE= false;
+    println("Animate?: ", ANIMATE);
   }
 }

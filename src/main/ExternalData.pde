@@ -10,7 +10,7 @@ class ExternalData extends Art {
   int scale = 5;
   float barWidth;
   int samples = width/2;
-  int shapeTrigger = 20;
+  int shapeTrigger = 25;
 
   ExternalData() {
     super();
@@ -42,13 +42,13 @@ class ExternalData extends Art {
       if (beatEnergy > shapeTrigger) {
 
         shapeTrigger = beatEnergy - 5;
-        float amp = map(getAmplitude(), 0, 1, 0, 40);
+        float amp = map(getAmplitude(), 0, 1, 20, 50);
         color col = generateFFTColor(-10, 50);
         initSplash((int)amp, col);
       }
       else if (beatEnergy > 5) {
 
-        float amp = map(getAmplitude(), 0, 1, 20, 150);
+        float amp = map(getAmplitude(), 0, 1, 50, 150);
         color col = generateFFTColor(100, 0);
         initCircle((int)amp, col);
       }

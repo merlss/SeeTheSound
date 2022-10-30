@@ -46,21 +46,3 @@ class Circ {
     ypos = ypos + speedY;
   }
 }
-
-void mousePressed() {
-  background(255);
-  println(frameRate);
-
-  for (int x = 0; x < howMany; x++) { //
-    circs[x].update();
-    circs[x].xpos = random(0, width);
-    circs[x].ypos = random(0, height);
-    circs[x].display();
-  }
-}
-
-void keyPressed() {
-  if (key=='1') ANIMATE= true;
-  if (key=='2') ANIMATE= false;
-  println("Animate?: ", ANIMATE);
-}
