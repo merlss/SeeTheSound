@@ -14,7 +14,7 @@ class SelfmadeArt {
     int size = 0;
 
     if (value > 400) {
-      size = map((int)value, 400, 623, 150, 50);
+      size = (int)map(value, 400, 623, 150, 50);
       float x = random(50, width-50);
       float y = random(50, height-50);
       CircleGenerator gen = new CircleGenerator(x, y, size, col);
@@ -22,7 +22,7 @@ class SelfmadeArt {
       gen.drawShape();
     }
     else {
-      size = map((int)value, 260, 400, 50, 10);
+      size = (int)map(value, 260, 400, 50, 10);
       float x = random(30, width-30);
       float y = random(30, height-30);
       ShapeGenerator gen = new ShapeGenerator(x, y, size, col);
