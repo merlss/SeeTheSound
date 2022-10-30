@@ -20,6 +20,9 @@ color defaultWaveColor = color(50);
 color defaultWaveBright = color(215,210,190,255);
 color defaultWaveDark = color(160,150,150,255);
 
+// screenshots
+int screenShotIterator = 1;
+
 KeyboardData keyboardArt;
 
 // ui Elements
@@ -62,6 +65,7 @@ String errorMessage;
 Button setupContinueButton;
 
 //pause window
+boolean showPauseScreen;
 boolean paused;
 Button pauseContinueButton;
 Button pauseExitButton;
@@ -167,6 +171,9 @@ void setup() {
 
 
 void draw() {
+  if (paused && !showPauseScreen) {
+    return;
+  }
   background(bgColor);
   if (bgPicture != null && drawBackground == true) {
     image(bgPicture, 0, 0, displayWidth, displayHeight);
@@ -180,7 +187,7 @@ void draw() {
   if (showFileName && fileName != null) {
     textLabel(fileName, calcWidth((dWidth/2)), calcHeight(550), calcFontSize(100), text_color);
   }
-  if (paused) {
+  if (showPauseScreen) {
     drawPauseScreen();
   }
   //println(isDrawing);
@@ -291,7 +298,7 @@ void loadSongDrawPage() {
     float space = calcWidth(12);
     if (pauseDrawButton == null) {
       pauseDrawButton = button("handlePause", "||", calcWidth(1850), calcHeight(1000), calcWidth(50), calcHeight(50), button_color, button_hoverColor, button_pressColor, calcFontSize(35), color(255));
-      saveImageButton = button("handleSaveImage", "save", calcWidth(1850), calcHeight(900), calcWidth(50), calcHeight(50), button_color, button_hoverColor, button_pressColor, calcFontSize(35), color(255));
+      saveImageButton = button("handleSaveImage", "save", calcWidth(1850), calcHeight(900), calcWidth(120), calcHeight(50), button_color, button_hoverColor, button_pressColor, calcFontSize(35), color(255));
     }
     if (c1B == null) {
       c1B = button("C", "C", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
@@ -347,6 +354,8 @@ void loadSongDrawPage() {
       a1hB.show();
       c2hB.show();
       d2hB.show();
+      pauseDrawButton.show();
+      saveImageButton.show();
     }
   }
   else {
@@ -563,7 +572,7 @@ void stopNote(String pressedKey) {
 }
 
 void loadPauseWindow() {
-  pauseDraw();
+  pauseDraw(true);
   hideUIObjects();
   if (pauseContinueButton == null) {
     pauseContinueButton = button("handlePauseContinue", "Continue", calcWidth(dWidth/2), calcHeight(320), calcWidth(380), calcHeight(100), button_color, button_hoverColor, button_pressColor, calcFontSize(50), font_color);
@@ -769,8 +778,20 @@ public void handleFileSelect() {
   selectInput("Select a file to process:", "fileSelected");
 }
 
-public void handlePauseDraw() {
+public void handlePause() {
+  if (paused) {
+    pauseDrawButton.setLabel("||");
+    startDraw();
+  }
+  else {
+    pauseDrawButton.setLabel(">");
+    pauseDraw(false);
+  }
+}
 
+public void handleSaveImage() {
+  save("screenshots/" + "screenshot" + screenShotIterator + ".jpg");
+  screenShotIterator++;
 }
 
 
@@ -817,7 +838,10 @@ void renderWave() {
   }
 }
 
-void pauseDraw() {
+void pauseDraw(boolean pauseScreen) {
+  if (pauseScreen) {
+    showPauseScreen = true;
+  }
   paused = true;
   isDrawing = false;
   inSelfPlayDraw = false;
@@ -827,6 +851,7 @@ void pauseDraw() {
   }
 }
 void stopDraw() {
+  showPauseScreen = false;
   paused = false;
   isDrawing = false;
   inSelfPlayDraw = false;
@@ -841,10 +866,12 @@ void startSelfDraw() {
   inSelfPlayDraw = true;
   drawBackground = false;
   paused = false;
+  showPauseScreen = false;
 }
 
 void startDraw() {
   isDrawing = true;
+  showPauseScreen = false;
   println("inside Of Draw");
   paused = false;
   if (audioFile != null) {
