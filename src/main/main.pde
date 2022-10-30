@@ -434,7 +434,7 @@ void controlEvent(CallbackEvent event) {
   if (event.getAction() == ControlP5.ACTION_PRESSED || event.getAction() == ControlP5.ACTION_RELEASED) {
     float value = 0;
     String pressedKey = "";
-    color col;
+    color col = color(0, 0, 0);
     switch(event.getController().getAddress()) {
     case "/C":
       println("Button C Pressed");
