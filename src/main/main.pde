@@ -193,7 +193,10 @@ void draw() {
     externalArt.redraw();
   }
   if (inSelfPlayDraw) {
-
+    if (frameCount % 4 == 0) {
+      keyboardArt.drawSplash();
+    }
+    keyboardArt.redraw();
   }
   if (currentPage == "loadMainScreen") {
     drawMainScreen();
@@ -283,7 +286,7 @@ void loadSongDrawPage() {
     currentPage = "loadSongDrawPage";
     background(bgColor);
     hideUIObjects();
-    float xStep = calcWidth(1920/18);
+    float xStep = calcWidth(dWidth/18);
     float xPos = xStep*4;
     float space = calcWidth(12);
     if (pauseDrawButton == null) {
@@ -291,40 +294,40 @@ void loadSongDrawPage() {
       saveImageButton = button("handleSaveImage", "save", calcWidth(1850), calcHeight(900), calcWidth(50), calcHeight(50), button_color, button_hoverColor, button_pressColor, calcFontSize(35), color(255));
     }
     if (c1B == null) {
-      c1B = button("C", "C", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+      c1B = button("C", "C", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
       xPos += xStep + space;
-      d1B = button("D", "D", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+      d1B = button("D", "D", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
       xPos += xStep + space;
-      e1B = button("E", "E", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+      e1B = button("E", "E", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
       xPos += xStep + space;
-      f1B = button("F", "F", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+      f1B = button("F", "F", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
       xPos += xStep + space;
-      g1B = button("G", "G", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+      g1B = button("G", "G", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
       xPos += xStep + space;
-      a1B = button("A", "A", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+      a1B = button("A", "A", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
       xPos += xStep + space;
-      b1B = button("B", "B", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+      b1B = button("B", "B", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
       xPos += xStep + space;
-      c2B = button("C2", "C", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+      c2B = button("C2", "C", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
       xPos += xStep + space;
-      d2B = button("D2", "D", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+      d2B = button("D2", "D", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
       xPos += xStep + space;
-      e2B = button("E2", "E", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+      e2B = button("E2", "E", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
 
       float xPosHalf = xStep*4+xStep/2+space/2;
-      c1hB = button("C#", "C#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+      c1hB = button("C#", "C#", xPosHalf, calcHeight(860), xStep*0.7, calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
       xPosHalf += xStep + space;
-      d1hB = button("D#", "D#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+      d1hB = button("D#", "D#", xPosHalf, calcHeight(860), xStep*0.7, calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
       xPosHalf += (xStep + space)*2;
-      f1hB = button("F#", "F#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+      f1hB = button("F#", "F#", xPosHalf, calcHeight(860), xStep*0.7, calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
       xPosHalf += xStep + space;
-      g1hB = button("G#", "G#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+      g1hB = button("G#", "G#", xPosHalf, calcHeight(860), xStep*0.7, calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
       xPosHalf += xStep + space;
-      a1hB = button("A#", "A#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+      a1hB = button("A#", "A#", xPosHalf, calcHeight(860), xStep*0.7, calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
       xPosHalf += (xStep + space)*2;
-      c2hB = button("C2#", "C#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+      c2hB = button("C2#", "C#", xPosHalf, calcHeight(860), xStep*0.7, calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
       xPosHalf += xStep + space;
-      d2hB = button("D2#", "D#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+      d2hB = button("D2#", "D#", xPosHalf, calcHeight(860), xStep*0.7, calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
     }
     else {
       c1B.show();
@@ -344,8 +347,6 @@ void loadSongDrawPage() {
       a1hB.show();
       c2hB.show();
       d2hB.show();
-      saveImageButton.show();
-      pauseDrawButton.show();
     }
   }
   else {
@@ -359,44 +360,44 @@ void loadSelfPlayingDraw() {
   currentPage = "loadSelfPlayingDraw";
   background(bgColor);
   hideUIObjects();
-  float xStep = calcWidth(1920/18);
-  float xPos = xStep*4;
+  float xStep = calcWidth(dWidth/18);
+  float xPos = xStep * 4;
   float space = calcWidth(12);
   if (c1B == null) {
-    c1B = button("C", "C", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+    c1B = button("C", "C", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
     xPos += xStep + space;
-    d1B = button("D", "D", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+    d1B = button("D", "D", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
     xPos += xStep + space;
-    e1B = button("E", "E", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+    e1B = button("E", "E", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
     xPos += xStep + space;
-    f1B = button("F", "F", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+    f1B = button("F", "F", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
     xPos += xStep + space;
-    g1B = button("G", "G", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+    g1B = button("G", "G", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
     xPos += xStep + space;
-    a1B = button("A", "A", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+    a1B = button("A", "A", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
     xPos += xStep + space;
-    b1B = button("B", "B", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+    b1B = button("B", "B", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
     xPos += xStep + space;
-    c2B = button("C2", "C", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+    c2B = button("C2", "C", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
     xPos += xStep + space;
-    d2B = button("D2", "D", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+    d2B = button("D2", "D", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
     xPos += xStep + space;
-    e2B = button("E2", "E", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
+    e2B = button("E2", "E", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
 
     float xPosHalf = xStep*4+xStep/2+space/2;
-    c1hB = button("C#", "C#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+    c1hB = button("C#", "C#", xPosHalf, calcHeight(860), xStep*0.7, calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
     xPosHalf += xStep + space;
-    d1hB = button("D#", "D#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+    d1hB = button("D#", "D#", xPosHalf, calcHeight(860), xStep*0.7, calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
     xPosHalf += (xStep + space)*2;
-    f1hB = button("F#", "F#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+    f1hB = button("F#", "F#", xPosHalf, calcHeight(860), xStep*0.7, calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
     xPosHalf += xStep + space;
-    g1hB = button("G#", "G#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+    g1hB = button("G#", "G#", xPosHalf, calcHeight(860), xStep*0.7, calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
     xPosHalf += xStep + space;
-    a1hB = button("A#", "A#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+    a1hB = button("A#", "A#", xPosHalf, calcHeight(860), xStep*0.7, calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
     xPosHalf += (xStep + space)*2;
-    c2hB = button("C2#", "C#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+    c2hB = button("C2#", "C#", xPosHalf, calcHeight(860), xStep*0.7, calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
     xPosHalf += xStep + space;
-    d2hB = button("D2#", "D#", calcWidth(xPosHalf), calcHeight(860), calcWidth(xStep*0.7), calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
+    d2hB = button("D2#", "D#", xPosHalf, calcHeight(860), xStep*0.7, calcHeight(120), pianoHalf_button_color, pianoHalf_button_hoverColor, pianoHalf_button_activeColor, calcFontSize(35), color(255));
   }
   else {
     c1B.show();
@@ -417,6 +418,7 @@ void loadSelfPlayingDraw() {
     c2hB.show();
     d2hB.show();
   }
+  startSelfDraw();
 }
 
 void controlEvent(CallbackEvent event) {
@@ -767,7 +769,9 @@ public void handleFileSelect() {
   selectInput("Select a file to process:", "fileSelected");
 }
 
-public void handlePauseDraw()
+public void handlePauseDraw() {
+
+}
 
 
 public void quitGame() {
@@ -775,11 +779,11 @@ public void quitGame() {
 }
 
 public float calcHeight(float h) {
-  return map(h, 0, 1080, 0, displayHeight);
+  return map(h, 0, 1080, 0, height);
 }
 
 public float calcWidth(float w) {
-  return map(w, 0, 1920, 0, displayWidth);
+  return map(w, 0, 1920, 0, width);
 }
 
 public int calcFontSize(int f) {
