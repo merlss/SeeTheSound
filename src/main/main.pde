@@ -790,8 +790,55 @@ public void handlePause() {
 }
 
 public void handleSaveImage() {
+  pauseDrawButton.hide();
+  saveImageButton.hide();
+  hideKeyboard();
+
   save("screenshots/" + "screenshot" + screenShotIterator + ".jpg");
   screenShotIterator++;
+
+  pauseDrawButton.show();
+  saveImageButton.show();
+  showKeyboard();
+}
+
+public void hideKeyboard() {
+  c1B.hide();
+  d1B.hide();
+  e1B.hide();
+  f1B.hide();
+  g1B.hide();
+  a1B.hide();
+  b1B.hide();
+  c2B.hide();
+  d2B.hide();
+  e2B.hide();
+  c1hB.hide();
+  d1hB.hide();
+  f1hB.hide();
+  g1hB.hide();
+  a1hB.hide();
+  c2hB.hide();
+  d2hB.hide();
+}
+public void showKeyboard() {
+  c1B.show();
+  d1B.show();
+  e1B.show();
+  f1B.show();
+  g1B.show();
+  a1B.show();
+  b1B.show();
+  c2B.show();
+  d2B.show();
+  e2B.show();
+  c1hB.show();
+  d1hB.show();
+  f1hB.show();
+  g1hB.show();
+  a1hB.show();
+  c2hB.show();
+  d2hB.show();
 }
 
 
