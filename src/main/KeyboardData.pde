@@ -8,7 +8,7 @@ class KeyboardData extends Art {
 
     int size = 0;
 
-    if (value > 400) {
+    if (value > 500) {
       size = (int)map(value, 400, 623, 150, 50);
       initCircle(size, col);
     }

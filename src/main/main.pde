@@ -425,97 +425,115 @@ void controlEvent(CallbackEvent event) {
   if (event.getAction() == ControlP5.ACTION_PRESSED || event.getAction() == ControlP5.ACTION_RELEASED) {
     float value = 0;
     String pressedKey = "";
+    color col;
     switch(event.getController().getAddress()) {
     case "/C":
       println("Button C Pressed");
       value = 261.63;
       pressedKey = "c";
+      col = color(80, 0, 120);
       break;
     case "/D":
       println("Button D Pressed");
       value = 293.66;
       pressedKey = "d";
+      col = color(5, 5, 200);
       break;
     case "/E":
       println("Button E Pressed");
       value = 329.63;
       pressedKey = "e";
+      col = color(30, 170, 200);
       break;
     case "/F":
       println("Button F Pressed");
       value = 349.23;
       pressedKey = "f";
+      col = color(300, 200, 80);
       break;
     case "/G":
       println("Button G Pressed");
       value = 392.00;
       pressedKey = "g";
+      col = color(255, 255, 50);
       break;
     case "/A":
       println("Button A Pressed");
       value = 440.00;
       pressedKey = "a";
+      col = color(255, 100, 0);
       break;
     case "/B":
       println("Button B Pressed");
       value = 493.88;
       pressedKey = "b";
+      col = color(200, 0, 0);
       break;
     case "/C2":
       println("Button C2 Pressed");
       value = 523.25;
       pressedKey = "c2";
+      col = color(80, 0, 120);
       break;
     case "/D2":
       println("Button D2 Pressed");
       value = 587.33;
       pressedKey = "d2";
+      col = color(80, 0, 120);
       break;
     case "/E2":
       println("Button E2 Pressed");
       value = 659.25;
       pressedKey = "e2";
+      col = color(80, 0, 120);
       break;
     case "/C#":
       println("Button A Pressed");
       value = 277.18;
       pressedKey = "c#";
+      col = color(80, 0, 120);
       break;
     case "/D#":
       println("Button B Pressed");
       value = 311.13;
       pressedKey = "d#";
+      col = color(80, 0, 120);
       break;
     case "/F#":
       println("Button C2 Pressed");
       value = 369.99;
       pressedKey = "f#";
+      col = color(80, 0, 120);
       break;
     case "/G#":
       println("Button D2 Pressed");
       value = 415.30;
       pressedKey = "g#";
+      col = color(80, 0, 120);
       break;
     case "/A#":
       println("Button E2 Pressed");
       value = 466.16;
       pressedKey = "a#";
+      col = color(80, 0, 120);
       break;
     case "/C2#":
       println("Button D2 Pressed");
       value = 554.37;
       pressedKey = "c2#";
+      col = color(80, 0, 120);
       break;
     case "/D2#":
       println("Button E2 Pressed");
       value = 622.25;
       pressedKey = "d2#";
+      col = color(80, 0, 120);
       break;
     }
     if (event.getAction() == ControlP5.ACTION_PRESSED && pressedKey.equals("") == false) {
       println("in");
       playNote(value, pressedKey);
-      keyboardArt.initNewShape(value, color(50, 50, 180));
+      keyboardArt.initNewShape(value, col);
     }
     else if (event.getAction() == ControlP5.ACTION_RELEASED && pressedKey.equals("") == false) {
       println("out");
