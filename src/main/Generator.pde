@@ -10,10 +10,10 @@ class Generator {
 
   float theta = 0;
 
-  float[] currPoints_x = new float[10];
-  float[] currPoints_y = new float[10];
-  float[] endPoints_x = new float[10];
-  float[] endPoints_y = new float[10];
+  float[] currPoints_x = new float[20];
+  float[] currPoints_y = new float[20];
+  float[] endPoints_x = new float[20];
+  float[] endPoints_y = new float[20];
 
   boolean isDrawed = false;
 
