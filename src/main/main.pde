@@ -94,6 +94,10 @@ float susLevel = 0.3;
 float susTime = 0.4;
 int susPedal = 1;
 
+//DrawPageUI
+Button pauseDrawButton;
+Button saveImageButton;
+
 //selfPlayDraw
 boolean inSelfPlayDraw = false;
 
@@ -282,6 +286,10 @@ void loadSongDrawPage() {
     float xStep = calcWidth(1920/18);
     float xPos = xStep*4;
     float space = calcWidth(12);
+    if (pauseDrawButton == null) {
+      pauseDrawButton = button("handlePause", "||", calcWidth(1850), calcHeight(1000), calcWidth(50), calcHeight(50), button_color, button_hoverColor, button_pressColor, calcFontSize(35), color(255));
+      saveImageButton = button("handleSaveImage", "save", calcWidth(1850), calcHeight(900), calcWidth(50), calcHeight(50), button_color, button_hoverColor, button_pressColor, calcFontSize(35), color(255));
+    }
     if (c1B == null) {
       c1B = button("C", "C", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
       xPos += xStep + space;
@@ -336,6 +344,8 @@ void loadSongDrawPage() {
       a1hB.show();
       c2hB.show();
       d2hB.show();
+      saveImageButton.show();
+      pauseDrawButton.show();
     }
   }
   else {
@@ -606,6 +616,12 @@ void hideUIObjects() {
   if (pauseVolumeSlider != null) {
     pauseVolumeSlider.hide();
   }
+  if (pauseDrawButton != null) {
+    pauseDrawButton.hide();
+  }
+  if (saveImageButton != null) {
+    saveImageButton.hide();
+  }
   if (c1B != null) {
     c1B.hide();
     d1B.hide();
@@ -750,6 +766,8 @@ void fileSelected(File file) {
 public void handleFileSelect() {
   selectInput("Select a file to process:", "fileSelected");
 }
+
+public void handlePauseDraw()
 
 
 public void quitGame() {
