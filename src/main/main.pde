@@ -85,8 +85,8 @@ String osc2 = "0";
 Env env;
 float atkTime = 0.005;
 float releaseTime = 0.2;
-float susLevel = 0.3;
-float susTime = 0.4;
+float susLevel = 1;
+float susTime = 1;
 int susPedal = 1;
 
 
@@ -809,6 +809,7 @@ void keyPressed(KeyEvent e) {
   // if (osc1 == "c" || osc2 == "c") {return};
   float value = 0;
   String pressedKey = "";
+  susPedal = 3; susLevel=2;
   switch(key) {
     case 'y': value = 261.63; if (osc1 == "c" || osc2 == "c") {return;} c1B.setColorBackground(piano_button_activeColor); pressedKey = "c"; break;
     case 's': value = 277.18; if (osc1 == "c#" || osc2 == "c#") {return;} c1hB.setColorBackground(pianoHalf_button_activeColor); pressedKey = "c#"; break;
@@ -827,7 +828,7 @@ void keyPressed(KeyEvent e) {
     case '.': value = 587.33; if (osc1 == "d2" || osc2 == "d2") {return;} d2B.setColorBackground(piano_button_activeColor); pressedKey = "d2";break;
     case 'ö': value = 622.25; if (osc1 == "d2#" || osc2 == "d2#") {return;} d2hB.setColorBackground(pianoHalf_button_activeColor); pressedKey = "d2#";break;
     case '-': value = 659.25; if (osc1 == "e2" || osc2 == "e2") {return;} e2B.setColorBackground(piano_button_activeColor); pressedKey = "e2"; break;
-    case ' ': susPedal = 4; break;
+   
 
   }
   if (value != 0) {
@@ -838,6 +839,7 @@ void keyPressed(KeyEvent e) {
 }
 
 void keyReleased() {
+  susPedal = 1; susLevel=1; 
   switch(key) {
     case 'y': println("in"); stopNote("c"); c1B.setColorBackground(piano_button_color);  break;
     case 's':println("in"); stopNote("c#"); c1hB.setColorBackground(pianoHalf_button_color); break;
@@ -856,6 +858,5 @@ void keyReleased() {
     case '.':println("in"); stopNote("d2"); d2B.setColorBackground(piano_button_color); break;
     case 'ö':println("in"); stopNote("d2#"); d2hB.setColorBackground(pianoHalf_button_color); break;
     case '-':println("in"); stopNote("e2"); e2B.setColorBackground(piano_button_color); break;
-    case ' ': susPedal = 1; break;
   }
 }
