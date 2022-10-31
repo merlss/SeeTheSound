@@ -42,13 +42,13 @@ class ExternalData extends Art {
       if (beatEnergy > shapeTrigger) {
 
         shapeTrigger = beatEnergy - 5;
-        float amp = map(getAmplitude(), 0, 1, 20, 50);
+        float amp = map(getAmplitude(amplitude), 0, 1, 20, 50);
         color col = generateFFTColor(-10, 50);
         initSplash((int)amp, col);
       }
       else if (beatEnergy > 5) {
 
-        float amp = map(getAmplitude(), 0, 1, 50, 150);
+        float amp = map(getAmplitude(amplitude), 0, 1, 50, 150);
         color col = generateFFTColor(100, 0);
         initCircle((int)amp, col);
       }

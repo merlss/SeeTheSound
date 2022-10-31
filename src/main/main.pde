@@ -776,8 +776,8 @@ public void handleOwnSong(int value) {
   loadSelfPlayingDraw();
   bgColor = defaultWaveBright;
   microphoneArt.setupMic(audioIn, amplitude);
-  audioIn.start();
-  amplitude.input(audioIn);
+  //audioIn.start();
+  //amplitude.input(audioIn);
 }
 
 public void handleSetupContinue() {

@@ -1,3 +1,5 @@
+import processing.sound.*;
+
 class MicrophoneData {
 
   Circ[] circs; //we will store our circles inside an array
@@ -8,9 +10,9 @@ class MicrophoneData {
   color[] cols = {color(255), color(255), color(255)};
   color[] strs = {color(255), color(255), color(255)};
 
-  Amplitude amp;
-  AudioIn in;
-  float ampt;
+Amplitude amp;
+AudioIn in;
+float ampt;
 
   void setupMic(AudioIn _in, Amplitude _amp) {
 
@@ -30,7 +32,7 @@ class MicrophoneData {
   void drawCircles() {
 
     ampt = amp.analyze();
-    println(ampt);
+    println("AMP:  " + ampt);
 
     if (ampt>0.030) {
       flashNow=true;

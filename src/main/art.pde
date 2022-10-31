@@ -23,9 +23,10 @@ class Art {
     return (int)max;
   }
 
-  float getAmplitude() {
+  float getAmplitude(Amplitude a) {
 
-    float ampScale = amplitude.analyze();
+    float ampScale = a.analyze();
+    println(ampScale);
     return ampScale;
   }
 
