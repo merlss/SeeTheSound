@@ -310,8 +310,8 @@ void loadSongDrawPage() {
     float xPos = xStep*4;
     float space = calcWidth(12);
     if (saveImageButton == null) {
-      //pauseDrawButton = button("handlePause", "||", calcWidth(1850), calcHeight(1000), calcWidth(50), calcHeight(50), button_color, button_hoverColor, button_pressColor, calcFontSize(35), color(255));
-      saveImageButton = button("handleSaveImage", "save", calcWidth(1850), calcHeight(900), calcWidth(120), calcHeight(50), button_color, button_hoverColor, button_pressColor, calcFontSize(35), color(255));
+      //pauseDrawButton = button("handlePause", "||", calcWidth(1800), calcHeight(1000), calcWidth(50), calcHeight(50), button_color, button_hoverColor, button_pressColor, calcFontSize(35), color(255));
+      saveImageButton = button("handleSaveImage", "save", calcWidth(1800), calcHeight(900), calcWidth(120), calcHeight(50), color(80), color(60), color(40), calcFontSize(35), color(255));
     }
     if (c1B == null) {
       c1B = button("C", "C", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
@@ -386,7 +386,11 @@ void loadSelfPlayingDraw() {
   float xPos = xStep * 4;
   float space = calcWidth(12);
   if (muteButton == null) {
-    muteButton = button("handleMute", "unmute", calcWidth(1800), calcHeight(900), calcWidth(150), calcHeight(50), color(80), color(60), color(40), calcFontSize(35), color(255));
+    muteButton = button("handleMute", "unmute", calcWidth(1800), calcHeight(970), calcWidth(150), calcHeight(50), color(80), color(60), color(40), calcFontSize(35), color(255));
+  }
+  if (saveImageButton == null) {
+    //pauseDrawButton = button("handlePause", "||", calcWidth(1850), calcHeight(1000), calcWidth(50), calcHeight(50), button_color, button_hoverColor, button_pressColor, calcFontSize(35), color(255));
+    saveImageButton = button("handleSaveImage", "save", calcWidth(1800), calcHeight(900), calcWidth(120), calcHeight(50), color(80), color(60), color(40), calcFontSize(35), color(255));
   }
   if (c1B == null) {
     c1B = button("C", "C", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
@@ -443,6 +447,7 @@ void loadSelfPlayingDraw() {
     c2hB.show();
     d2hB.show();
     muteButton.show();
+    saveImageButton.show();
   }
   startSelfDraw();
 }
