@@ -12,6 +12,18 @@ class ExternalData extends Art {
   int samples = width/2;
   int shapeTrigger = 25;
 
+//SineWave
+  float lastAmp = 0;
+  int sineThickness = 15;
+  int sineWaveResolution = 8;
+  int sineWidth;
+  float sineIncrement = 0.0;
+  float sineHeight = 140.0;
+  float sinePeriod = 500.0;
+  float sineXIncrement;
+  float[] sineYValues;
+  color sineColor = color(92,118,199,255);
+
   ExternalData() {
     super();
   }
@@ -29,6 +41,10 @@ class ExternalData extends Art {
 
     barWidth = width/float(bands);
     fft.input(file);
+
+    sineWidth = width;
+    sineXIncrement = (TWO_PI / sinePeriod) * sineWaveResolution;
+    sineYValues = new float[sineWidth/sineWaveResolution];
 
     amplitude.input(file);
     waveform.input(file);
@@ -91,5 +107,51 @@ class ExternalData extends Art {
 
     color col = color(r, g, b);
     return col;
+  }
+
+  void drawWave() {
+    waveform.analyze();
+
+    float w = ((3*width)/4) / 100;
+    float space = (width/4)/100;
+    float xPos = space + w/2;
+
+
+    strokeWeight(w);
+    stroke(color(0));
+    for (int i = 0; i < 100; i++) {
+      float y = map(waveform.data[i], -1, 1, -500, 500);
+      y = abs(y);
+      line(xPos, height/2-y,xPos, height/2 +y);
+      xPos = xPos + w + space;
+    }
+
+  }
+
+  void drawSinWave() {
+    float a = getAmplitude(amplitude);
+    float amp = log( 1+ (lastAmp - a)) + a;
+    lastAmp = a;
+    sineHeight = amp * 100;
+    sinePeriod = amp * 500;
+
+    sineIncrement += 0.15;
+
+    float j = sineIncrement;
+    for (int i = 0; i < sineYValues.length; i++) {
+      sineYValues[i] = sin(j)*sineHeight;
+      j+=sineXIncrement;
+    }
+
+    stroke(sineColor);
+    color col = sineColor;
+    strokeWeight(sineThickness);
+    for (int x = 1; x < sineYValues.length; x++) {
+      float g = map((x-1)*sineWaveResolution, 0, sineWidth, 0, 255);
+      //col = color(red(sineColor), g, blue(sineColor));
+      col = color(g,g,g);
+      stroke(col);
+      line((x-1)*sineWaveResolution, height/2+sineYValues[(x-1)], x*sineWaveResolution, height/2+sineYValues[x]);
+    }
   }
 }

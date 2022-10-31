@@ -170,7 +170,7 @@ void setup() {
   beatDetector = new BeatDetector(this);
   fft = new FFT(this, 32);
   amplitude = new Amplitude(this);
-  waveform = new Waveform(this, 1);
+  waveform = new Waveform(this, 100);
   audioIn = new AudioIn(this, 0);
 
   loadMainScreen();
@@ -188,8 +188,7 @@ void draw() {
   }
   sound.volume(volume);
   if (drawBackground) {
-    calcWave();
-    renderWave();
+    drawSinWave();
   }
   if (showFileName && fileName != null) {
     textLabel(fileName, calcWidth((dWidth/2)), calcHeight(550), calcFontSize(100), text_color);
@@ -199,6 +198,7 @@ void draw() {
   }
   //println(isDrawing);
   if (isDrawing) {
+    //externalArt.drawSinWave();
     externalArt.drawWave();
     externalArt.initNewShape();
     if (frameCount % 4 == 0) {
@@ -930,19 +930,16 @@ public int calcFontSize(int f) {
   return int((x+y)/2);
 }
 
-void calcWave() {
-  // Increment theta (try different values for 'angular velocity' here
+
+void drawSinWave() {
   sineIncrement += 0.02;
 
-  // For every x value, calculate a y value with sine function
-  float x = sineIncrement;
+  float j = sineIncrement;
   for (int i = 0; i < sineYValues.length; i++) {
-    sineYValues[i] = sin(x)*sineHeight;
-    x+=sineXIncrement;
+    sineYValues[i] = sin(j)*sineHeight;
+    j+=sineXIncrement;
   }
-}
 
-void renderWave() {
   stroke(sineColor);
   color col = sineColor;
   strokeWeight(sineThickness);
