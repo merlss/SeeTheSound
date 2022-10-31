@@ -24,6 +24,7 @@ class ExternalData extends Art {
   float[] sineYValues;
   color sineColor = color(92,118,199,255);
 
+
   ExternalData() {
     super();
   }
@@ -119,13 +120,13 @@ class ExternalData extends Art {
     strokeWeight(w);
     stroke(color(0));
 
-    sineIncrement += 0.05;
+    /*sineIncrement += 0.05;
 
     float j = sineIncrement;
     for (int i = 0; i < sineYValues.length; i++) {
       sineYValues[i] = sin(j)*sineHeight;
       j+=sineXIncrement;
-    }
+    }*/
 
     for (int i = 0; i < 100; i++) {
       float f = map(waveform.data[i], -1, 1, -100, 100);
@@ -133,10 +134,23 @@ class ExternalData extends Art {
       color c = color(205 - f, 200 - f, 180 - f,255);
       stroke(c);
       float y = map(waveform.data[i], -1, 1, -500, 500);
-      y = abs(y);
-      line(xPos, sineYValues[i] + height/2-y,xPos, sineYValues[i] + height/2 +y);
+      line(xPos, height/2,xPos, height/2 +y);
       xPos = xPos + w + space;
     }
+
+  }
+
+  void drawShape() {
+    waveform.analyze();
+
+    beginShape();
+    for(int i = 1; i < waveform.data.length; i++) {
+      float x = map(waveform.data[i], -1, 1, 0, width);
+      float y = map(waveform.data[i-1], -1, 1, 0, height);
+      vertex(x,y);
+    }
+    endShape();
+
 
   }
 

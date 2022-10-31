@@ -201,6 +201,7 @@ void draw() {
     //externalArt.drawSinWave();
     externalArt.drawWave();
     externalArt.initNewShape();
+    //externalArt.drawShape();
     if (frameCount % 4 == 0) {
       externalArt.drawSplash();
     }
