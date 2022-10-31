@@ -1,6 +1,5 @@
 import processing.sound.*;
 
-
 class Art {
 
   ArrayList<ShapeGenerator> shapes = new ArrayList<ShapeGenerator>();
@@ -26,7 +25,6 @@ class Art {
   float getAmplitude(Amplitude a) {
 
     float ampScale = a.analyze();
-    println(ampScale);
     return ampScale;
   }
 

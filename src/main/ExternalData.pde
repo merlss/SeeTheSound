@@ -16,7 +16,7 @@ class ExternalData extends Art {
     super();
   }
 
-  void setupArt(SoundFile file, BeatDetector beat, Amplitude amp, Waveform wave, FFT ffT, PixelQueue q, color bright, color dark ) {
+  void setupArt(SoundFile file, BeatDetector beat, Amplitude amp, Waveform wave, FFT ffT, PixelQueue q, color bright, color dark) {
     defaultWaveDark = dark;
     defaultWaveBright = bright;
     queue = q;

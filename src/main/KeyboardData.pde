@@ -18,25 +18,4 @@ class KeyboardData extends Art {
       initSplash(size, col);
     }
   }
-
-
-
-  /*
-
-  void continueCircle() {
-
-    for (int i = 0; i < circles.size(); i++) {
-      circles.get(i).drawShape();
-    }
-  }
-
-  void continueSplash() {
-
-    for (int i = 0; i < shapes.size(); i++) {
-      ShapeGenerator thisShape = shapes.get(i);
-      if (!thisShape.isFinalDrawed()) {
-        thisShape.drawShape();
-      }
-    }
-  }*/
 }

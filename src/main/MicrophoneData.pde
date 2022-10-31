@@ -1,6 +1,6 @@
 import processing.sound.*;
 
-class MicrophoneData {
+class MicrophoneData extends Art {
 
   Circ[] circs; //we will store our circles inside an array
 
@@ -10,9 +10,13 @@ class MicrophoneData {
   color[] cols = {color(255), color(255), color(255)};
   color[] strs = {color(255), color(255), color(255)};
 
-Amplitude amp;
-AudioIn in;
-float ampt;
+  Amplitude amp;
+  AudioIn in;
+  float ampt;
+
+  MicrophoneData() {
+    super();
+  }
 
   void setupMic(AudioIn _in, Amplitude _amp) {
 
@@ -29,8 +33,7 @@ float ampt;
 
   void drawCircles() {
 
-    ampt = amp.analyze();
-    println("AMP:  " + ampt);
+    ampt = getAmplitude(amp);
 
     if (ampt>0.030) {
       flashNow=true;
@@ -45,30 +48,10 @@ float ampt;
         circs[x].col=color(255);
       }
 
-
       if (ANIMATE) {
         circs[x].update();
       }
-
       circs[x].display();
     }
   }
-/*
-  void mousePressed() {
-    background(255);
-    println(frameRate);
-
-    for (int x = 0; x < howMany; x++) { //
-      circs[x].update();
-      circs[x].xpos = random(0, width);
-      circs[x].ypos = random(0, height);
-      circs[x].display();
-    }
-  }
-
-  void keyPressed() {
-    if (key=='1') ANIMATE= true;
-    if (key=='2') ANIMATE= false;
-    println("Animate?: ", ANIMATE);
-  }*/
 }
