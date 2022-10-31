@@ -45,6 +45,7 @@ class ExternalData extends Art {
     sineWidth = width;
     sineXIncrement = (TWO_PI / sinePeriod) * sineWaveResolution;
     sineYValues = new float[sineWidth/sineWaveResolution];
+    sineWaveResolution = width/100;
 
     amplitude.input(file);
     waveform.input(file);
@@ -112,17 +113,28 @@ class ExternalData extends Art {
   void drawWave() {
     waveform.analyze();
 
-    float w = ((3*width)/4) / 100;
-    float space = (width/4)/100;
+    float w = ((3*displayWidth)/4) / 100;
+    float space = (displayWidth/4)/100;
     float xPos = space + w/2;
-
-
     strokeWeight(w);
     stroke(color(0));
+
+    sineIncrement += 0.05;
+
+    float j = sineIncrement;
+    for (int i = 0; i < sineYValues.length; i++) {
+      sineYValues[i] = sin(j)*sineHeight;
+      j+=sineXIncrement;
+    }
+
     for (int i = 0; i < 100; i++) {
+      float f = map(waveform.data[i], -1, 1, -100, 100);
+      f = abs(f);
+      color c = color(205 - f, 200 - f, 180 - f,255);
+      stroke(c);
       float y = map(waveform.data[i], -1, 1, -500, 500);
       y = abs(y);
-      line(xPos, height/2-y,xPos, height/2 +y);
+      line(xPos, sineYValues[i] + height/2-y,xPos, sineYValues[i] + height/2 +y);
       xPos = xPos + w + space;
     }
 
@@ -135,7 +147,7 @@ class ExternalData extends Art {
     sineHeight = amp * 100;
     sinePeriod = amp * 500;
 
-    sineIncrement += 0.15;
+    sineIncrement += 0.05;
 
     float j = sineIncrement;
     for (int i = 0; i < sineYValues.length; i++) {
