@@ -313,7 +313,10 @@ void loadSongDrawPage() {
       //pauseDrawButton = button("handlePause", "||", calcWidth(1800), calcHeight(1000), calcWidth(50), calcHeight(50), button_color, button_hoverColor, button_pressColor, calcFontSize(35), color(255));
       saveImageButton = button("handleSaveImage", "save", calcWidth(1800), calcHeight(900), calcWidth(120), calcHeight(50), color(80), color(60), color(40), calcFontSize(35), color(255));
     }
-    if (c1B == null) {
+    else {
+      saveImageButton.show();
+    }
+    /*if (c1B == null) {
       c1B = button("C", "C", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
       xPos += xStep + space;
       d1B = button("D", "D", xPos, calcHeight(1000), xStep, calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
@@ -369,7 +372,7 @@ void loadSongDrawPage() {
       d2hB.show();
       //pauseDrawButton.show();
       saveImageButton.show();
-    }
+    }*/
   }
   else {
     showErrorMessage = true;

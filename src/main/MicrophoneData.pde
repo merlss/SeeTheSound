@@ -17,10 +17,8 @@ float ampt;
   void setupMic(AudioIn _in, Amplitude _amp) {
 
     circs = new Circ[howMany];
-    in = _in;
-    amp = _amp;
-    in.start();
-    amp.input(in);
+    _in.start();
+    _amp.input(in);
 
     for (int i = 0; i < howMany; i++) {
 
