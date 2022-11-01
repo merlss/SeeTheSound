@@ -116,45 +116,6 @@ class ExternalData extends Art {
     color col = color(r, g, b);
     return col;
   }
-/*
-  void drawWave(boolean changeValues) {
-    waveform.analyze();
-
-    waveData = waveform.data;
-
-  }*/
-
-  void redrawWave() {
-    float w = ((3*displayWidth)/4) / 100;
-    float space = (displayWidth/4)/100;
-    float xPos = space + w/2;
-    strokeWeight(w);
-    stroke(color(0));
-
-    for (int i = 0; i < 100; i++) {
-      float f = map(waveData[i], -1, 1, -100, 100);
-      f = abs(f);
-      color c = color(205 - f, 200 - f, 180 - f,255);
-      stroke(c);
-      float y = map(waveData[i], -1, 1, -500, 500);
-      line(xPos, height/2,xPos, height/2 +y);
-      xPos = xPos + w + space;
-    }
-  }
-
-  void drawShape() {
-    waveform.analyze();
-
-    beginShape();
-    for(int i = 1; i < waveform.data.length; i++) {
-      float x = map(waveform.data[i], -1, 1, 0, width);
-      float y = map(waveform.data[i-1], -1, 1, 0, height);
-      vertex(x,y);
-    }
-    endShape();
-
-
-  }
 
   void drawSinWave() {
     float a = getAmplitude(amplitude);
