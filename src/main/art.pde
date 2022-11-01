@@ -1,5 +1,10 @@
+/*
+Merle Krauss
+*/
+
 import processing.sound.*;
 
+// parent class to combine sound data with shapes
 class Art {
 
   ArrayList<ShapeGenerator> shapes = new ArrayList<ShapeGenerator>();
@@ -9,6 +14,7 @@ class Art {
   color defaultWaveBright;
   color defaultWaveDark;
 
+// analyze the energy of the beatDetector
   int getBeatEnergy() {
 
     double[] buffer = beatDetector.getEnergyBuffer();
@@ -22,33 +28,14 @@ class Art {
     return (int)max;
   }
 
+// analyze the amplitude
   float getAmplitude(Amplitude a) {
 
     float ampScale = a.analyze();
     return ampScale;
   }
 
-  void drawWave() {
-
-    loadPixels();
-
-    waveform.analyze();
-    int mid = height / 2;
-
-    Column column = new Column(waveform.data[0], defaultWaveDark, defaultWaveBright);
-    if (queue.size == width-1) {
-      queue.dequeue();
-      queue.dequeue();
-
-    }
-    queue.enqueue(column);
-    queue.enqueue(column);
-
-    queue.drawPixels();
-
-    updatePixels();
-  }
-
+// sets the initial values of the splash shape
   void initSplash(int size, color col) {
 
     float x = random(30, width-30);
@@ -59,6 +46,7 @@ class Art {
     gen.drawShape();
   }
 
+// sets the initial values of the circle shape
   void initCircle(int size, color col) {
 
     float x = random(50, width-50);
@@ -68,7 +56,7 @@ class Art {
     gen.drawShape();
   }
 
-
+// continue the splash shape with one more line
   void drawSplash() {
     for (int i = 0; i < circles.size(); i++) {
       circles.get(i).drawShape();
@@ -82,6 +70,7 @@ class Art {
     }
   }
 
+// is called every frame after everything is cleared
   void redraw() {
     for (int i = 0; i < circles.size(); i++) {
       circles.get(i).redrawShape();

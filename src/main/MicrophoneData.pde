@@ -1,3 +1,7 @@
+/*
+Phuong
+*/
+
 import processing.sound.*;
 
 class MicrophoneData extends Art {

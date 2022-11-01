@@ -1,3 +1,8 @@
+/*
+Merle Krauss
+*/
+
+// parent class for generating a new shape
 class Generator {
 
   int circleRad;
@@ -21,7 +26,7 @@ class Generator {
 
     startX = _startX;
     startY = _startY;
-    circleRad = _rad;    // something between 20 and 200
+    circleRad = _rad;
     col = _col;
   }
 
@@ -31,9 +36,5 @@ class Generator {
 
   boolean isFinalDrawed() {
     return isDrawed;
-  }
-
-  void setDepth(int v) {
-    depth = v;
   }
 }

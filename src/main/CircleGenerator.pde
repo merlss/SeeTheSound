@@ -1,3 +1,8 @@
+/*
+Merle Krauss
+*/
+
+// drawes the circle shape
 class CircleGenerator extends Generator {
 
   int blur = 5;
@@ -8,6 +13,7 @@ class CircleGenerator extends Generator {
 
   }
 
+// draws the circle one time smaller every time the function is called
   void drawShape() {
 
     pushMatrix();
@@ -28,6 +34,7 @@ class CircleGenerator extends Generator {
     }
   }
 
+// called every frame
   void redrawShape() {
 
     pushMatrix();

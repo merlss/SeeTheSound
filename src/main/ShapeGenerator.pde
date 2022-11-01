@@ -1,3 +1,8 @@
+/*
+Merle Krauss
+*/
+
+// drawes the splash shape
 class ShapeGenerator extends Generator {
 
   int initRad;
@@ -13,6 +18,7 @@ class ShapeGenerator extends Generator {
 
   }
 
+// initial values: starting and end points of every stroke (arm)
   void initShape() {
     pushMatrix();
 
@@ -40,6 +46,7 @@ class ShapeGenerator extends Generator {
     popMatrix();
   }
 
+// called every frame to set the shape in the foreground
   void redrawShape() {
 
     pushMatrix();
@@ -64,6 +71,7 @@ class ShapeGenerator extends Generator {
     popMatrix();
   }
 
+// for every stroke, a new line is drawn in direction of the certain end point
   void drawShape() {
 
     if (circleRad > 10) {
@@ -104,7 +112,6 @@ class ShapeGenerator extends Generator {
 
     strokeWeight(weight);
     strokeJoin(ROUND);
-    //strokeCap(ROUND);
 
     line(x1, y1, x2, y2);
   }
