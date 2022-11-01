@@ -119,7 +119,7 @@ class ExternalData extends Art {
   void drawWave(boolean changeValues) {
     waveform.analyze();
 
-    waveData = wavaform.data;
+    waveData = waveform.data;
 
   }
 
