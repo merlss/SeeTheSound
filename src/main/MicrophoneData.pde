@@ -4,7 +4,7 @@ Phuong
 
 import processing.sound.*;
 
-class MicrophoneData extends Art {
+class MicrophoneData {
 
   Circ[] circs; //we will store our circles inside an array
 
@@ -18,13 +18,12 @@ class MicrophoneData extends Art {
   AudioIn in;
   float ampt;
 
-  MicrophoneData() {
-    super();
-  }
 
   void setupMic(AudioIn _in, Amplitude _amp) {
 
     circs = new Circ[howMany];
+    in = _in;
+    amp = _amp;
     _in.start();
     _amp.input(in);
 
@@ -37,7 +36,7 @@ class MicrophoneData extends Art {
 
   void drawCircles() {
 
-    ampt = getAmplitude(amp);
+    ampt = amp.analyze();
 
     if (ampt>0.030) {
       flashNow=true;
@@ -47,14 +46,15 @@ class MicrophoneData extends Art {
     for (int x = 0; x < howMany; x++) {
       if (flashNow) {
         circs[x].col=color(random(255), random(255));
-        ;
       } else {
         circs[x].col=color(255);
       }
 
+
       if (ANIMATE) {
         circs[x].update();
       }
+
       circs[x].display();
     }
   }

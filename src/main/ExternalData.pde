@@ -32,10 +32,9 @@ class ExternalData extends Art {
     super();
   }
 
-  void setupArt(SoundFile file, BeatDetector beat, Amplitude amp, Waveform wave, FFT ffT, PixelQueue q, color bright, color dark) {
+  void setupArt(SoundFile file, BeatDetector beat, Amplitude amp, Waveform wave, FFT ffT,  color bright, color dark) {
     defaultWaveDark = dark;
     defaultWaveBright = bright;
-    queue = q;
     beatDetector = beat;
     amplitude = amp;
     waveform = wave;
@@ -153,14 +152,15 @@ class ExternalData extends Art {
     for (int i = 0; i < samples; i++) {
 
       float index = (width/samples) * i;
-      float y = map(waveform.data[i], -1, 1, 0, 150);
+      float y = map(waveform.data[i], -1, 1, -150, 150);
 
-      float f = map(waveData[i], -1, 1, -100, 100);
-      f = abs(f);
-      color c = color(205 - f, 200 - f, 180 - f,255);
+      float f = map(waveData[i], -1, 1, -120, 120);
+      color c = color(0, 125 + f, 150 - (int)(f/2),255);
       stroke(c);
+
+
       strokeWeight(15);
-      line(index, mid-y, index, mid+y);
+      line(index, mid, index, mid+y);
       waveData2.set(i, y);
     }
   }
@@ -174,12 +174,12 @@ class ExternalData extends Art {
       float index = (width/samples) * i;
       float y = waveData2.get(i);
 
-      float f = map(waveData[i], -1, 1, -100, 100);
-      f = abs(f);
-      color c = color(205 - f, 200 - f, 180 - f,255);
+      float f = map(waveData[i], -1, 1, -120, 120);
+      color c = color(0, 125 + f, 150 - (int)(f/2),255);
       stroke(c);
+
       strokeWeight(15);
-      line(index, mid-y, index, mid+y);
+      line(index, mid, index, mid+y);
     }
   }
 

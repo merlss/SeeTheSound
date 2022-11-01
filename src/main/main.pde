@@ -1,3 +1,7 @@
+/*
+Mathis Pöhlsen 202232489
+*/
+
 import controlP5.*;
 import processing.sound.*;
 
@@ -205,7 +209,7 @@ void draw() {
 
   // draw a Song
   if (isDrawing) {
-    if (frameCount % 5 == 0) {
+    if (frameCount % 2 == 0) {
       externalArt.drawSampleWave();
     }
     externalArt.redrawSampleWave();
@@ -349,8 +353,7 @@ public void handleSetupContinue() {
   }
   if (fileName != null && prefix.equals("mp3")) {
     drawBackground = false;
-    PixelQueue pixelqueue = new PixelQueue(defaultWaveBright, defaultWaveDark);
-    externalArt.setupArt(audioFile, beatDetector, amplitude, waveform, fft, pixelqueue, defaultWaveBright, defaultWaveDark);
+    externalArt.setupArt(audioFile, beatDetector, amplitude, waveform, fft, defaultWaveBright, defaultWaveDark);
     loadSongDrawPage();
   }
   else {
@@ -554,119 +557,102 @@ void controlEvent(CallbackEvent event) {
     color col = color(0, 0, 0);
     switch(event.getController().getAddress()) {
     case "/C":
-      println("Button C Pressed");
       value = 261.63;
       pressedKey = "c";
       col = color(80, 0, 120);
       bgColor = color(220, 140, 250);
       break;
     case "/D":
-      println("Button D Pressed");
       value = 293.66;
       pressedKey = "d";
       col = color(10, 10, 200);
       bgColor = color(120, 120, 250);
       break;
     case "/E":
-      println("Button E Pressed");
       value = 329.63;
       pressedKey = "e";
       col = color(30, 170, 200);
       bgColor = color(120, 230, 250);
       break;
     case "/F":
-      println("Button F Pressed");
       value = 349.23;
       pressedKey = "f";
       col = color(30, 200, 80);
       bgColor = color(130, 250, 180);
       break;
     case "/G":
-      println("Button G Pressed");
       value = 392.00;
       pressedKey = "g";
       col = color(255, 255, 50);
       bgColor = color(255, 255, 220);
       break;
     case "/A":
-      println("Button A Pressed");
       value = 440.00;
       pressedKey = "a";
       col = color(255, 100, 0);
       bgColor = color(255, 220, 120);
       break;
     case "/B":
-      println("Button B Pressed");
       value = 493.88;
       pressedKey = "b";
       col = color(200, 0, 0);
       bgColor = color(250, 100, 100);
       break;
     case "/C2":
-      println("Button C2 Pressed");
       value = 523.25;
       pressedKey = "c2";
       col = color(160, 80, 200);
       bgColor = color(220, 150, 250);
       break;
     case "/D2":
-      println("Button D2 Pressed");
       value = 587.33;
       pressedKey = "d2";
       col = color(50, 60, 220);
       bgColor = color(150, 160, 250);
       break;
     case "/E2":
-      println("Button E2 Pressed");
       value = 659.25;
       pressedKey = "e2";
       col = color(60, 80, 220);
       bgColor = color(140, 160, 250);
       break;
     case "/C#":
-      println("Button A Pressed");
       value = 277.18;
       pressedKey = "c#";
       col = color(45, 5, 160);
       bgColor = color(150, 100, 220);
       break;
     case "/D#":
-      println("Button B Pressed");
       value = 311.13;
       pressedKey = "d#";
       col = color(20, 40, 200);
       bgColor = color(100, 120, 250);
       break;
     case "/F#":
-      println("Button C2 Pressed");
       value = 369.99;
       pressedKey = "f#";
       col = color(100, 220, 65);
       bgColor = color(135, 250, 100);
       break;
     case "/G#":
-      println("Button D2 Pressed");
       value = 415.30;
       pressedKey = "g#";
       col = color(255, 175, 25);
       bgColor = color(255, 200, 100);
       break;
     case "/A#":
-      println("Button E2 Pressed");
       value = 466.16;
       pressedKey = "a#";
       col = color(220, 50, 0);
       bgColor = color(250, 150, 100);
       break;
     case "/C2#":
-      println("Button D2 Pressed");
       value = 554.37;
       pressedKey = "c2#";
       col = color(105, 70, 210);
       bgColor = color(200, 165, 250);
       break;
     case "/D2#":
-      println("Button E2 Pressed");
       value = 622.25;
       pressedKey = "d2#";
       col = color(60, 40, 200);
@@ -674,12 +660,10 @@ void controlEvent(CallbackEvent event) {
       break;
     }
     if (event.getAction() == ControlP5.ACTION_PRESSED && pressedKey.equals("") == false) {
-      println("in");
       playNote(value, pressedKey);
       keyboardArt.initNewShape(value, col);
     }
     else if (event.getAction() == ControlP5.ACTION_RELEASED && pressedKey.equals("") == false) {
-      println("out");
       stopNote(pressedKey);
     }
   }
@@ -928,23 +912,23 @@ void keyPressed(KeyEvent e) {
 
 void keyReleased() {
   switch(key) {
-    case 'y': println("in"); stopNote("c"); c1B.setColorBackground(piano_button_color);  break;
-    case 's':println("in"); stopNote("c#"); c1hB.setColorBackground(pianoHalf_button_color); break;
-    case 'x':println("in"); stopNote("d"); d1B.setColorBackground(piano_button_color); break;
-    case 'd':println("in"); stopNote("d#"); d1hB.setColorBackground(pianoHalf_button_color); break;
-    case 'c':println("in"); stopNote("e"); e1B.setColorBackground(piano_button_color); break;
-    case 'v':println("in"); stopNote("f"); f1B.setColorBackground(piano_button_color); break;
-    case 'g':println("in"); stopNote("f#"); f1hB.setColorBackground(pianoHalf_button_color); break;
-    case 'b':println("in"); stopNote("g"); g1B.setColorBackground(piano_button_color); break;
-    case 'h':println("in"); stopNote("g#"); g1hB.setColorBackground(pianoHalf_button_color); break;
-    case 'n':println("in"); stopNote("a"); a1B.setColorBackground(piano_button_color); break;
-    case 'j':println("in"); stopNote("a#"); a1hB.setColorBackground(pianoHalf_button_color); break;
-    case 'm':println("in"); stopNote("b"); b1B.setColorBackground(piano_button_color); break;
-    case ',':println("in"); stopNote("c2"); c2B.setColorBackground(piano_button_color); break;
-    case 'l':println("in"); stopNote("c2#"); c2hB.setColorBackground(pianoHalf_button_color); break;
-    case '.':println("in"); stopNote("d2"); d2B.setColorBackground(piano_button_color); break;
-    case 'ö':println("in"); stopNote("d2#"); d2hB.setColorBackground(pianoHalf_button_color); break;
-    case '-':println("in"); stopNote("e2"); e2B.setColorBackground(piano_button_color); break;
+    case 'y': stopNote("c"); c1B.setColorBackground(piano_button_color);  break;
+    case 's': stopNote("c#"); c1hB.setColorBackground(pianoHalf_button_color); break;
+    case 'x': stopNote("d"); d1B.setColorBackground(piano_button_color); break;
+    case 'd': stopNote("d#"); d1hB.setColorBackground(pianoHalf_button_color); break;
+    case 'c': stopNote("e"); e1B.setColorBackground(piano_button_color); break;
+    case 'v': stopNote("f"); f1B.setColorBackground(piano_button_color); break;
+    case 'g': stopNote("f#"); f1hB.setColorBackground(pianoHalf_button_color); break;
+    case 'b': stopNote("g"); g1B.setColorBackground(piano_button_color); break;
+    case 'h': stopNote("g#"); g1hB.setColorBackground(pianoHalf_button_color); break;
+    case 'n': stopNote("a"); a1B.setColorBackground(piano_button_color); break;
+    case 'j': stopNote("a#"); a1hB.setColorBackground(pianoHalf_button_color); break;
+    case 'm': stopNote("b"); b1B.setColorBackground(piano_button_color); break;
+    case ',': stopNote("c2"); c2B.setColorBackground(piano_button_color); break;
+    case 'l': stopNote("c2#"); c2hB.setColorBackground(pianoHalf_button_color); break;
+    case '.': stopNote("d2"); d2B.setColorBackground(piano_button_color); break;
+    case 'ö': stopNote("d2#"); d2hB.setColorBackground(pianoHalf_button_color); break;
+    case '-': stopNote("e2"); e2B.setColorBackground(piano_button_color); break;
     case ' ': susPedal = 1; break;
   }
 }

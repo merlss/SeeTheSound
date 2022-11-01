@@ -10,7 +10,6 @@ class Art {
   ArrayList<ShapeGenerator> shapes = new ArrayList<ShapeGenerator>();
   ArrayList<CircleGenerator> circles = new ArrayList<CircleGenerator>();
 
-  PixelQueue queue;
   color defaultWaveBright;
   color defaultWaveDark;
 
