@@ -199,7 +199,13 @@ void draw() {
   //println(isDrawing);
   if (isDrawing) {
     //externalArt.drawSinWave();
-    externalArt.drawWave();
+    if (frameCount % 60 == 0) {
+      externalArt.drawWave(true);
+    }
+    else {
+      externalArt.drawWave(false);
+    }
+    //externalArt.drawWave();
     externalArt.initNewShape();
     //externalArt.drawShape();
     if (frameCount % 4 == 0) {

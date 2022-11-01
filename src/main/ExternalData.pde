@@ -24,6 +24,8 @@ class ExternalData extends Art {
   float[] sineYValues;
   color sineColor = color(92,118,199,255);
 
+  float[] waveData;
+
 
   ExternalData() {
     super();
@@ -46,10 +48,13 @@ class ExternalData extends Art {
     sineWidth = width;
     sineXIncrement = (TWO_PI / sinePeriod) * sineWaveResolution;
     sineYValues = new float[sineWidth/sineWaveResolution];
+    waveData = new float[100];
     sineWaveResolution = width/100;
 
     amplitude.input(file);
     waveform.input(file);
+    waveform.analyze();
+    waveData = waveform.data;
   }
 
   void initNewShape() {
@@ -111,33 +116,29 @@ class ExternalData extends Art {
     return col;
   }
 
-  void drawWave() {
+  void drawWave(boolean changeValues) {
     waveform.analyze();
 
+    waveData = wavaform.data;
+
+  }
+
+  void redrawWave() {
     float w = ((3*displayWidth)/4) / 100;
     float space = (displayWidth/4)/100;
     float xPos = space + w/2;
     strokeWeight(w);
     stroke(color(0));
 
-    /*sineIncrement += 0.05;
-
-    float j = sineIncrement;
-    for (int i = 0; i < sineYValues.length; i++) {
-      sineYValues[i] = sin(j)*sineHeight;
-      j+=sineXIncrement;
-    }*/
-
     for (int i = 0; i < 100; i++) {
-      float f = map(waveform.data[i], -1, 1, -100, 100);
+      float f = map(waveData[i], -1, 1, -100, 100);
       f = abs(f);
       color c = color(205 - f, 200 - f, 180 - f,255);
       stroke(c);
-      float y = map(waveform.data[i], -1, 1, -500, 500);
+      float y = map(waveData[i], -1, 1, -500, 500);
       line(xPos, height/2,xPos, height/2 +y);
       xPos = xPos + w + space;
     }
-
   }
 
   void drawShape() {
