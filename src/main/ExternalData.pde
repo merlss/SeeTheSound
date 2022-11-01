@@ -9,7 +9,7 @@ class ExternalData extends Art {
   int bands = 32;
   int scale = 5;
   float barWidth;
-  int samples = width/2;
+  int samples;
   int shapeTrigger = 25;
 
 //SineWave
@@ -25,6 +25,7 @@ class ExternalData extends Art {
   color sineColor = color(92,118,199,255);
 
   float[] waveData;
+  FloatList waveData2 = new FloatList();
 
 
   ExternalData() {
@@ -115,13 +116,13 @@ class ExternalData extends Art {
     color col = color(r, g, b);
     return col;
   }
-
+/*
   void drawWave(boolean changeValues) {
     waveform.analyze();
 
     waveData = waveform.data;
 
-  }
+  }*/
 
   void redrawWave() {
     float w = ((3*displayWidth)/4) / 100;
@@ -180,5 +181,58 @@ class ExternalData extends Art {
       stroke(col);
       line((x-1)*sineWaveResolution, height/2+sineYValues[(x-1)], x*sineWaveResolution, height/2+sineYValues[x]);
     }
+  }
+
+  void drawSampleWave() {
+
+    int mid = height / 2;
+
+    waveform.analyze();
+
+    for (int i = 0; i < samples; i++) {
+
+      float index = (width/samples) * i;
+      float y = map(waveform.data[i], -1, 1, 0, 150);
+
+      float f = map(waveData[i], -1, 1, -100, 100);
+      f = abs(f);
+      color c = color(205 - f, 200 - f, 180 - f,255);
+      stroke(c);
+      strokeWeight(15);
+      line(index, mid-y, index, mid+y);
+      waveData2.set(i, y);
+    }
+  }
+
+  void redrawSampleWave() {
+
+    int mid = height / 2;
+
+    for (int i = 0; i < waveData2.size(); i++) {
+
+      float index = (width/samples) * i;
+      float y = waveData2.get(i);
+
+      float f = map(waveData[i], -1, 1, -100, 100);
+      f = abs(f);
+      color c = color(205 - f, 200 - f, 180 - f,255);
+      stroke(c);
+      strokeWeight(15);
+      line(index, mid-y, index, mid+y);
+    }
+  }
+
+  void initWaveData() {
+
+    waveData2.clear();
+    for (int i = 0; i < samples; i++) {
+      waveData2.set(i, 1);
+    }
+  }
+
+  void setSamples(int s) {
+
+    samples = s;
+    initWaveData();
   }
 }
