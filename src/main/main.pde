@@ -16,6 +16,9 @@ FFT fft;
 Amplitude amplitude;
 Waveform waveform;
 int samples = width/2;
+color defaultWaveColor = color(50);
+color defaultWaveBright = color(116,116,142,255);
+color defaultWaveDark = color(46,46,72,255);;
 
 // ui Elements
 ControlP5 ui;
@@ -137,41 +140,20 @@ void setup() {
   env = new Env(this);
 
   drawBackground = true;
-  int rand = int(random(1,4));
-  if (rand == 1) {
-    bgPicture = loadImage("painting1.jpg");
-    image(bgPicture, 0, 0, displayWidth, displayHeight);
-    loadPixels();
-    for (int i = 0; i < pixels.length; i++ ) {
-    color pixel = pixels[i];
-      pixels[i] = color(int(red(pixel)*darkness), int(green(pixel)*darkness), int(blue(pixel)*darkness));
-    }
-    updatePixels();
-  } else if (rand == 2) {
-    bgPicture = loadImage("painting1.jpg");
-    image(bgPicture, 0, 0, displayWidth, displayHeight);
-    loadPixels();
-    for (int i = 0; i < pixels.length; i++ ) {
-    color pixel = pixels[i];
-      pixels[i] = color(int(red(pixel)*darkness), int(green(pixel)*darkness), int(blue(pixel)*darkness));
-    }
-    updatePixels();
-  } else if (rand == 3) {
-    bgPicture = loadImage("painting1.jpg");
-    image(bgPicture, 0, 0, displayWidth, displayHeight);
-    loadPixels();
-    for (int i = 0; i < pixels.length; i++ ) {
-    color pixel = pixels[i];
-      pixels[i] = color(int(red(pixel)*darkness), int(green(pixel)*darkness), int(blue(pixel)*darkness));
-    }
-    updatePixels();
+  bgPicture = loadImage("painting1.jpg");
+  image(bgPicture, 0, 0, displayWidth, displayHeight);
+  loadPixels();
+  for (int i = 0; i < pixels.length; i++ ) {
+  color pixel = pixels[i];
+    pixels[i] = color(int(red(pixel)*darkness), int(green(pixel)*darkness), int(blue(pixel)*darkness));
   }
+  updatePixels();
 
   art = new Art();
   beatDetector = new BeatDetector(this);
   fft = new FFT(this, 32);
   amplitude = new Amplitude(this);
-  waveform = new Waveform(this, width/2);
+  waveform = new Waveform(this, 1);
 
   loadMainScreen();
 }
@@ -194,15 +176,15 @@ void draw() {
   if (paused) {
     drawPauseScreen();
   }
+  //println(isDrawing);
   if (isDrawing) {
-    //art.initShapes();
+
     art.drawWave();
-    /*for (int i = 0; i < art.shapes.size(); i++) {
-      art.shapes.get(i).redrawShape();
-    }
+    art.initShapes();
     if (frameCount % 4 == 0) {
-      art.drawShape();
-    }*/
+      art.drawSplash();
+    }
+    art.redraw();
   }
   if (currentPage == "loadMainScreen") {
     drawMainScreen();
@@ -211,6 +193,17 @@ void draw() {
     drawSetupScreen();
   }
 
+}
+
+void loadBackground() {
+  bgPicture = loadImage("painting1.jpg");
+  image(bgPicture, 0, 0, displayWidth, displayHeight);
+  loadPixels();
+  for (int i = 0; i < pixels.length; i++ ) {
+  color pixel = pixels[i];
+    pixels[i] = color(int(red(pixel)*darkness), int(green(pixel)*darkness), int(blue(pixel)*darkness));
+  }
+  updatePixels();
 }
 
 void drawMainScreen() {
@@ -236,6 +229,7 @@ void loadMainScreen() {
   String lastPage = currentPage;
   currentPage = "loadMainScreen";
   background(bgColor);
+  loadBackground();
   hideUIObjects();
   if (drawSongButton == null) {
     drawMainScreen();
@@ -280,11 +274,12 @@ void loadSongDrawPage() {
     currentPage = "loadSongDrawPage";
     background(bgColor);
     hideUIObjects();
-    float xStep = displayWidth/18;
+    float xStep = calcWidth(1920/18);
     float xPos = xStep*4;
     float space = 12;
     if (c1B == null) {
-      art.setupArt(audioFile, beatDetector, amplitude, waveform, fft);
+      PixelQueue pixelQueue = new PixelQueue(defaultWaveBright, defaultWaveDark);
+      art.setupArt(audioFile, beatDetector, amplitude, waveform, fft, pixelQueue, defaultWaveBright, defaultWaveDark);
       c1B = button("C", "C", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
       xPos += xStep + space;
       d1B = button("D", "D", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
@@ -352,7 +347,7 @@ void loadSelfPlayingDraw() {
   background(bgColor);
   drawBackground = false;
   hideUIObjects();
-  float xStep = displayWidth/18;
+  float xStep = calcWidth(1920/18);
   float xPos = xStep*4;
   float space = 12;
   c1B = button("C", "C", calcWidth(xPos), calcHeight(1000), calcWidth(xStep), calcHeight(400), piano_button_color, piano_button_hoverColor, piano_button_activeColor, calcFontSize(35), color(0));
@@ -494,7 +489,7 @@ void controlEvent(CallbackEvent event) {
 }
 
 void playNote(float pitch, String pressedKey) {
-  
+
   if (osc1.equals("0") == false && osc2.equals("0") == false) {
     return;
   }

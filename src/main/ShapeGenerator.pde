@@ -19,21 +19,20 @@ class ShapeGenerator extends Generator {
     translate(startX, startY);
 
     stroke(col);
-    float r = map(circleRad, 5, 80, 3, 8);
+    float r = map(circleRad, 0, 30, 3, 8);
     strokeCount = (int)r;
-
 
     for (int i = 0; i < strokeCount; i++) {
 
       Stroke stroke = new Stroke();
-      stroke.addPoint(0, 0, circleRad+5);
+      stroke.addPoint(0, 0, circleRad-5);
       strokes.add(stroke);
 
       currPoints_x[i] = 0;
       currPoints_y[i] = 0;
 
-      endPoints_x[i] = random(circleRad*2, circleRad*4) * cos(theta);
-      endPoints_y[i] = random(circleRad*2, circleRad*4) * sin(theta);
+      endPoints_x[i] = random(circleRad, circleRad*4) * cos(theta);
+      endPoints_y[i] = random(circleRad, circleRad*4) * sin(theta);
 
       theta += strokeCount+1;
     }
@@ -63,15 +62,11 @@ class ShapeGenerator extends Generator {
       }
     }
     popMatrix();
-
-    if (!isFinalDrawed()) {
-      drawShape();
-    }
   }
 
   void drawShape() {
 
-    if (circleRad > 0) {
+    if (circleRad > 10) {
 
       pushMatrix();
       translate(startX, startY);
@@ -88,7 +83,7 @@ class ShapeGenerator extends Generator {
         float nextY = currPoints_y[i] + y;
 
         stroke(col);
-        int w = circleRad + 5;
+        int w = circleRad - 5;
         drawLine(currPoints_x[i], currPoints_y[i], nextX, nextY, w);
 
         currPoints_x[i] = nextX;
@@ -109,7 +104,7 @@ class ShapeGenerator extends Generator {
 
     strokeWeight(weight);
     strokeJoin(ROUND);
-    strokeCap(ROUND);
+    //strokeCap(ROUND);
 
     line(x1, y1, x2, y2);
   }
