@@ -9,6 +9,9 @@ class KeyboardData extends Art {
     super();
   }
 
+  void setupKeyBoardArt() {
+    clearArrays();
+  }
 // depending on the piano keys a new shape is initialized in the parent
   void initNewShape(float value, color col) {
 

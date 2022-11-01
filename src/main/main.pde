@@ -92,6 +92,8 @@ float[] sineYValues;
 color sineColor = color(92,118,199,255);
 float volume = 1;
 
+SoundFile menuMusic;
+
 //Piano Buttons
 SinOsc oscillator1;
 SinOsc oscillator2;
@@ -140,7 +142,7 @@ Button d2hB;
 
 
 void setup() {
-  size(displayWidth, displayHeight);
+  fullScreen();
   ui = new ControlP5(this);
   PFont f = createFont("Courier", 20, true);
   font = new ControlFont(f);
@@ -163,6 +165,8 @@ void setup() {
   bgColor = defaultWaveBright;
   drawBackground = true;
   loadBackground();
+
+  menuMusic = new SoundFile(this, "MenuMusic.mp3");
 
   // init external classes
   externalArt = new ExternalData();
@@ -285,6 +289,7 @@ void drawMainScreen() {
 }
 void loadMainScreen() {
   drawBackground = true;
+  menuMusic.play();
   String lastPage = currentPage;
   currentPage = "loadMainScreen";
   background(bgColor);
@@ -353,6 +358,7 @@ public void handleSetupContinue() {
   }
   if (fileName != null && prefix.equals("mp3")) {
     drawBackground = false;
+    menuMusic.stop();
     externalArt.setupArt(audioFile, beatDetector, amplitude, waveform, fft, defaultWaveBright, defaultWaveDark);
     loadSongDrawPage();
   }
@@ -455,6 +461,8 @@ public void handleSaveImage() {
 
 // load Self Plaing Page
 void loadSelfPlayingPage() {
+  menuMusic.stop();
+  keyboardArt.setupKeyBoardArt();
   String lastPage = currentPage;
   currentPage = "loadSelfPlayingPage";
   background(bgColor);
@@ -466,7 +474,6 @@ void loadSelfPlayingPage() {
     muteButton = button("handleMute", "unmute", calcWidth(1800), calcHeight(970), calcWidth(150), calcHeight(50), color(80), color(60), color(40), calcFontSize(35), color(255));
   }
   if (saveImageButton == null) {
-    //pauseDrawButton = button("handlePause", "||", calcWidth(1850), calcHeight(1000), calcWidth(50), calcHeight(50), button_color, button_hoverColor, button_pressColor, calcFontSize(35), color(255));
     saveImageButton = button("handleSaveImage", "save", calcWidth(1800), calcHeight(900), calcWidth(120), calcHeight(50), color(80), color(60), color(40), calcFontSize(35), color(255));
   }
   if (c1B == null) {

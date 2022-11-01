@@ -13,6 +13,15 @@ class Art {
   color defaultWaveBright;
   color defaultWaveDark;
 
+  Art() {
+    shapes = new ArrayList<ShapeGenerator>();
+    circles = new ArrayList<CircleGenerator>();
+  }
+
+  void clearArrays() {
+    shapes = new ArrayList<ShapeGenerator>();
+    circles = new ArrayList<CircleGenerator>();
+  }
 // analyze the energy of the beatDetector
   int getBeatEnergy() {
 
@@ -36,7 +45,9 @@ class Art {
 
 // sets the initial values of the splash shape
   void initSplash(int size, color col) {
-
+    if (shapes.size() > 10) {
+      shapes.remove(0);
+    }
     float x = random(30, width-30);
     float y = random(30, height-30);
     ShapeGenerator gen = new ShapeGenerator(x, y, size, col);
@@ -47,7 +58,9 @@ class Art {
 
 // sets the initial values of the circle shape
   void initCircle(int size, color col) {
-
+    if (circles.size() > 20) {
+      circles.remove(0);
+    }
     float x = random(50, width-50);
     float y = random(50, height-50);
     CircleGenerator gen = new CircleGenerator(x, y, size, col);

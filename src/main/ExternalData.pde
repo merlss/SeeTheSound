@@ -55,6 +55,7 @@ class ExternalData extends Art {
     waveform.input(file);
     waveform.analyze();
     waveData = waveform.data;
+    clearArrays();
   }
 
   void initNewShape() {
