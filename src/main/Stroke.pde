@@ -1,3 +1,8 @@
+/*
+Merle Krauss
+*/
+
+// instance for every stroke (arm) of the splash shape
 class Stroke {
 
   FloatList mPoints_x = new FloatList();
