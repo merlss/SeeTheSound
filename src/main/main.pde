@@ -16,7 +16,7 @@ FFT fft;
 Amplitude amplitude;
 Waveform waveform;
 AudioIn audioIn;
-int samples = width/2;
+int samples;
 color defaultWaveColor = color(50);
 color defaultWaveBright = color(215,210,190,255);
 color defaultWaveDark = color(160,150,150,255);
@@ -169,7 +169,9 @@ void setup() {
   beatDetector = new BeatDetector(this);
   fft = new FFT(this, 32);
   amplitude = new Amplitude(this);
-  waveform = new Waveform(this, 100);
+  samples = width / 20;
+  externalArt.setSamples(samples);
+  waveform = new Waveform(this, samples);
   audioIn = new AudioIn(this, 0);
 
   loadMainScreen();
@@ -203,16 +205,11 @@ void draw() {
 
   // draw a Song
   if (isDrawing) {
-    //externalArt.drawSinWave();
-    if (frameCount % 60 == 0) {
-      externalArt.drawWave(true);
+    if (frameCount % 5 == 0) {
+      externalArt.drawSampleWave();
     }
-    else {
-      externalArt.drawWave(false);
-    }
-    //externalArt.drawWave();
+    externalArt.redrawSampleWave();
     externalArt.initNewShape();
-    //externalArt.drawShape();
     if (frameCount % 4 == 0) {
       externalArt.drawSplash();
     }
